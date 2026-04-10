@@ -278,3 +278,63 @@ body {
   border-radius: var(--radius);
   cursor: pointer;
 }
+
+
+
+.pricing-grid {
+  display: flex;
+  gap: 30px;
+  align-items: center; /* Aligne les cartes sur leur axe central */
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.price-card {
+  flex: 1; /* Chaque carte prend 1 part égale de l'espace */
+  background-color: var(--surface);
+  padding: 30px;
+  border-radius: var(--radius);
+  text-align: center;
+  position: relative; /* Pour le badge absolute */
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+
+/* La carte mise en avant */
+.price-card.featured {
+  transform: scale(1.05); /* Agrandissement */
+  border: 2px solid var(--accent);
+  box-shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+  z-index: 10; /* Pour passer par-dessus les ombres des voisines */
+}
+
+/* Le badge "Populaire" */
+.badge-popular {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%); /* Centre le badge parfaitement */
+  background-color: var(--accent);
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+/* Nettoyage de la liste */
+.price-card ul {
+  list-style: none;
+  margin: 20px 0;
+  color: var(--text-muted);
+}
+
+.price-card li {
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 15px 0;
+}

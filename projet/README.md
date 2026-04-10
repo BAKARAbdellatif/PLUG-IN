@@ -680,6 +680,147 @@ Construire une barre de navigation avec logo, liens, et bouton — alignés avec
 
 > **Concepts à utiliser** : `display: flex`, `align-items: center`, `justify-content: space-between`, `gap`
 
+
+---
+
+# 🛠️ Exercice 2.2 — Section Pricing (Flexbox & Mise en avant)
+
+L'objectif est d'aligner trois offres tarifaires. Nous allons apprendre à rendre des colonnes parfaitement égales et à utiliser un effet de "zoom" sur l'offre la plus intéressante pour l'utilisateur.
+
+### 1. Comprendre les outils
+* **`flex: 1`** : C'est une propriété "magique". Appliquée aux enfants d'un conteneur Flex, elle leur dit : "Prenez tout l'espace disponible et partagez-le de manière égale". Ainsi, vos 3 cartes auront exactement la même largeur.
+* **`transform: scale(1.05)`** : Permet d'agrandir un élément. Ici, on augmente la taille de la carte centrale de 5% pour qu'elle dépasse légèrement les autres.
+* **`list-style: none`** : Indispensable pour enlever les petits points noirs (`bullets`) par défaut des listes `<ul>`.
+* **`position: absolute` (Rappel)** : Nous allons l'utiliser à nouveau pour placer le badge "Populaire" sur le bord de la carte.
+
+
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc dans votre fichier `index.html`. Notez la classe spéciale `featured` sur la deuxième carte.
+
+```html
+<section class="pricing">
+  <h2>Nos tarifs</h2>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <h3>Starter</h3>
+      <div class="price">9€<span>/mois</span></div>
+      <ul>
+        <li>5 projets</li>
+        <li>1 Go stockage</li>
+      </ul>
+      <button class="btn-outline">Choisir</button>
+    </div>
+
+    <div class="price-card featured">
+      <span class="badge-popular">Populaire</span>
+      <h3>Pro</h3>
+      <div class="price">29€<span>/mois</span></div>
+      <ul>
+        <li>Projets illimités</li>
+        <li>50 Go stockage</li>
+        <li>Support prioritaire</li>
+      </ul>
+      <button class="btn-primary">Choisir</button>
+    </div>
+
+    <div class="price-card">
+      <h3>Enterprise</h3>
+      <div class="price">99€<span>/mois</span></div>
+      <ul>
+        <li>Tout illimité</li>
+        <li>SSO & Sécurité</li>
+        <li>Support dédié</li>
+      </ul>
+      <button class="btn-outline">Choisir</button>
+    </div>
+  </div>
+</section>
+```
+
+---
+
+### 3. Action : Aligner les colonnes (CSS)
+Dans `style.css`, nous allons créer la grille flexible :
+
+```css
+.pricing-grid {
+  display: flex;
+  gap: 30px;
+  align-items: center; /* Aligne les cartes sur leur axe central */
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.price-card {
+  flex: 1; /* Chaque carte prend 1 part égale de l'espace */
+  background-color: var(--surface);
+  padding: 30px;
+  border-radius: var(--radius);
+  text-align: center;
+  position: relative; /* Pour le badge absolute */
+  border: 1px solid rgba(255,255,255,0.05);
+}
+```
+
+---
+
+### 4. Action : Mise en avant et détails
+Ajoutons le style pour la carte "Pro" et nettoyons les listes.
+
+```css
+/* La carte mise en avant */
+.price-card.featured {
+  transform: scale(1.05); /* Agrandissement */
+  border: 2px solid var(--accent);
+  box-shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+  z-index: 10; /* Pour passer par-dessus les ombres des voisines */
+}
+
+/* Le badge "Populaire" */
+.badge-popular {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%); /* Centre le badge parfaitement */
+  background-color: var(--accent);
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+/* Nettoyage de la liste */
+.price-card ul {
+  list-style: none;
+  margin: 20px 0;
+  color: var(--text-muted);
+}
+
+.price-card li {
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 15px 0;
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Regardez la différence de hauteur et de taille entre la carte 'Pro' et les autres. C'est le `scale(1.05)` qui crée cet effet de relief. Essayez de passer la valeur à `scale(1.2)` pour voir l'effet s'accentuer (mais attention, ça risque de déborder !)."
+
+**Vérification :**
+1. Les 3 cartes ont-elles bien la même largeur ?
+2. Le badge "Populaire" est-il bien à cheval sur le bord haut de la carte centrale ?
+3. Les puces de listes ont-elles bien disparu ?
+
 ---
 
 # 🛠️ Exercice 2.1 — Navbar complète (Flexbox)
