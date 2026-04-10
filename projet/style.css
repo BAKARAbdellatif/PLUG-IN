@@ -551,3 +551,24 @@ body {
     font-size: 1.5rem; /* On grossit un peu l'icône pour le tactile */
   }
 }
+
+
+.banner {
+  width: 100%;
+  margin-bottom: 30px;
+  border-radius: var(--radius);
+  overflow: hidden; /* Pour que l'image respecte les coins arrondis du parent */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.banner-img {
+  display: block; /* Supprime l'espace vide sous l'image */
+  width: 100%;
+  height: 200px; /* On impose la hauteur de la bannière */
+  
+  /* ÉLÉMENT CLÉ : Empêche la déformation */
+  object-fit: cover;
+  
+  /* On centre la vue sur le milieu de l'image */
+  object-position: center;
+}

@@ -1648,7 +1648,73 @@ Afficher une image de bannière qui s'adapte à toutes les tailles d'écran sans
 
 > **Concepts à utiliser** : `width: 100%`, `height`, `object-fit: cover`, `object-position: center`
 
+
 ---
+
+# 🛠️ Exercice 4.3 — Images responsives (Object-fit)
+
+L'objectif est d'afficher une bannière élégante dans notre dashboard. Peu importe que l'utilisateur soit sur un écran ultra-large ou sur un petit téléphone, l'image doit toujours remplir son espace proprement, comme un papier peint bien posé.
+
+### 1. Comprendre les outils
+* **`width: 100%`** : L'image s'adapte à la largeur de son conteneur parent.
+* **`height: 200px`** : On impose une hauteur fixe pour que la bannière ne prenne pas toute la page sur mobile.
+* **`object-fit: cover`** : C'est la propriété "magique". Elle dit à l'image : "Remplis tout le cadre de 200px. Si tu es trop grande, coupe tes bords, mais ne te déforme jamais".
+* **`object-position: center`** : Indique que si l'image doit être coupée, on veut garder la partie centrale visible.
+
+
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc au début de votre `<main class="main-content">`, juste avant vos cartes de statistiques.
+
+```html
+<div class="banner">
+  <img src="https://picsum.photos/1200/400" alt="Banner" class="banner-img">
+</div>
+```
+
+---
+
+### 3. Action : Rendre l'image intelligente (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+.banner {
+  width: 100%;
+  margin-bottom: 30px;
+  border-radius: var(--radius);
+  overflow: hidden; /* Pour que l'image respecte les coins arrondis du parent */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.banner-img {
+  display: block; /* Supprime l'espace vide sous l'image */
+  width: 100%;
+  height: 200px; /* On impose la hauteur de la bannière */
+  
+  /* ÉLÉMENT CLÉ : Empêche la déformation */
+  object-fit: cover;
+  
+  /* On centre la vue sur le milieu de l'image */
+  object-position: center;
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Amusez-vous à redimensionner votre navigateur. Vous allez remarquer que l'image semble se 'recadrer' toute seule. Elle ne devient jamais toute mince ou toute écrasée. Essayez de remplacer `cover` par `contain` pour voir la différence : avec `contain`, l'image essaie de se montrer en entier, ce qui laisse souvent des espaces vides sur les côtés."
+
+**Vérification :**
+1. L'image occupe-t-elle bien toute la largeur de votre zone de contenu ?
+2. Fait-elle bien toujours 200px de haut, même sur mobile ?
+3. Les coins de la bannière sont-ils bien arrondis ?
+
+---
+
+**C'est la fin du Module 4 sur le Responsive !** Vos étudiants savent maintenant créer des interfaces qui s'adaptent à tous les supports. 
+
 
 ---
 
