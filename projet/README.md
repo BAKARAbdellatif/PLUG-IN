@@ -1327,7 +1327,128 @@ Le problème d'une colonne fixe de 250px, c'est que sur mobile, elle prend toute
 
 > **Concepts à utiliser** : `grid-template-columns: repeat(auto-fill, minmax(220px, 1fr))`, `gap`
 
+
+
 ---
+
+# 🛠️ Exercice 3.2 — Grille de "Stat Cards" (Grid Responsive)
+
+L'objectif est d'afficher les indicateurs clés (KPI) de DevPulse. Nous voulons que les cartes se rangent intelligemment : sur une seule ligne si l'écran est large, mais qu'elles "sautent" à la ligne suivante si l'espace vient à manquer.
+
+### 1. Comprendre les outils
+* **`repeat(auto-fill, ...)`** : On demande au navigateur de créer automatiquement autant de colonnes que possible sans déborder du conteneur.
+* **`minmax(220px, 1fr)`** : C'est la règle de survie de la carte. Elle ne peut jamais faire moins de **220px** de large. Si elle a de la place, elle s'étire pour prendre **1 part (1fr)** de l'espace restant.
+* **L'imbrication Flex** : Même si les cartes sont placées par une **Grid**, l'intérieur de chaque carte (le texte) sera géré par **Flexbox** pour un alignement vertical facile.
+
+
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc à l'intérieur de la balise `<main class="main-content">` (juste après le paragraphe de bienvenue) :
+
+```html
+<div class="stat-grid">
+  <div class="stat-card">
+    <span class="stat-label">Revenus</span>
+    <span class="stat-value">€47,200</span>
+    <span class="stat-change positive">+12.5%</span>
+  </div>
+  
+  <div class="stat-card">
+    <span class="stat-label">Utilisateurs</span>
+    <span class="stat-value">3,842</span>
+    <span class="stat-change positive">+8.2%</span>
+  </div>
+  
+  <div class="stat-card">
+    <span class="stat-label">Taux d'erreur</span>
+    <span class="stat-value">0.42%</span>
+    <span class="stat-change negative">+0.1%</span>
+  </div>
+  
+  <div class="stat-card">
+    <span class="stat-label">Uptime</span>
+    <span class="stat-value">99.98%</span>
+    <span class="stat-change positive">stable</span>
+  </div>
+</div>
+```
+
+---
+
+### 3. Action : Créer la grille intelligente (CSS)
+Ajoutez ceci dans `style.css`. Regardez bien la ligne `grid-template-columns`, c'est elle qui fait tout le travail.
+
+```css
+.stat-grid {
+  display: grid;
+  /* La formule magique pour le responsive automatique */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.stat-card {
+  background-color: var(--surface);
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  
+  /* On utilise Flexbox pour empiler le texte verticalement */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+```
+
+---
+
+### 4. Action : Styliser les données
+On donne de l'importance aux chiffres et on colore les indicateurs de tendance.
+
+```css
+.stat-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.stat-change {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  width: fit-content; /* Le fond s'adapte à la taille du texte */
+}
+
+.positive {
+  color: var(--success);
+  background-color: rgba(0, 184, 148, 0.1);
+}
+
+.negative {
+  color: #ff7675; /* Rouge */
+  background-color: rgba(255, 118, 117, 0.1);
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Redimensionnez lentement la largeur de votre fenêtre. Vous allez voir les cartes passer de 4 à 3, puis 2, puis 1 colonne de manière fluide. Nous n'avons pas écrit une seule Media Query pour cela ! C'est la force de la fonction `minmax` associée au `auto-fill`."
+
+**Vérification :**
+1. Les cartes sont-elles bien alignées avec un espace (`gap`) entre elles ?
+2. Le montant des revenus est-il bien plus gros que le libellé ?
+3. Les badges +12.5% et +0.1% ont-ils bien des couleurs différentes ?
 
 ---
 
