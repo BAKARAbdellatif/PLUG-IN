@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Carte Produit</title>
+    <style>
+        /* Style de base pour centrer la carte sur la page */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Conteneur de la carte */
+        .product-card {
+            background-color: #fff;
+            width: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* Effet au survol de la carte */
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Image du produit */
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* Contenu textuel */
+        .product-info {
+            padding: 5px;
+            text-align: center;
+        }
+
+        .product-title {
+            margin: 0 20px 10px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .product-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* Bouton Acheter */
+        .buy-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        /* Effet au survol du bouton */
+        .buy-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="product-card">
+        <img src="casque.webp" alt="Casque Audio" class="product-image">
+        
+        <div class="product-info">
+            <h2 class="product-title">Casque Premium</h2>
+            <p class="product-description">
+                Vivez une expérience sonore immersive avec une réduction de bruit active et un confort exceptionnel.
+            </p>
+            <span class="product-price">199,00 €</span>
+            <button class="buy-button">Acheter</button>
+        </div>
+    </div>
+
+</body>
+</html>
