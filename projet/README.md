@@ -438,7 +438,100 @@ L'objectif est de créer une barre de navigation qui reste accessible en haut de
 * **Flexbox (`space-between`)** : On va demander au navigateur de distribuer l'espace automatiquement pour pousser le logo à gauche, les liens au milieu et le bouton à droite.
 * **`backdrop-filter: blur()`** : C'est une propriété moderne qui permet de flouter ce qui se trouve *derrière* l'élément. Cela crée l'effet "vitre" très utilisé par Apple ou Microsoft.
 
+---
 
+# 🛠️ Exercice 1.5 — Le Z-Index (L'empilement)
+
+Jusqu'à présent, nous avons travaillé en 2D (haut, bas, gauche, droite). Le **z-index**, c'est la troisième dimension. C'est ce qui permet de décider quel élément passe "par-dessus" l'autre, comme si vous empiliez des cartes de visite sur une table.
+
+### 1. Comprendre les outils
+* **`z-index`** : C'est un numéro d'ordre. Plus le chiffre est élevé, plus l'élément est proche de vous (donc au-dessus des autres). *Note : le z-index ne fonctionne que sur les éléments dont la position n'est pas "static" (donc absolute, relative, fixed, ou sticky).*
+* **`transform: rotate(deg)`** : Permet de faire pivoter un élément. On utilise `deg` pour degrés (ex: `5deg` ou `-5deg`).
+* **Positionnement absolu multiple** : En mettant plusieurs éléments en `absolute` dans un même parent `relative`, ils vont tous s'empiler au même endroit par défaut.
+
+
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc dans votre fichier `index.html`. Nous créons un conteneur avec trois cartes à l'intérieur.
+
+```html
+<div class="stack-container">
+  <div class="stack-card card-back">Carte arrière (Z: 1)</div>
+  <div class="stack-card card-mid">Carte milieu (Z: 2)</div>
+  <div class="stack-card card-front">Carte devant (Z: 3)</div>
+</div>
+```
+
+---
+
+### 3. Action : Créer l'empilement (CSS)
+Ouvrez `style.css`. Nous allons d'abord superposer les cartes, puis les décaler une par une.
+
+```css
+.stack-container {
+  position: relative;
+  height: 300px;
+  margin: 50px auto;
+  width: 200px;
+}
+
+.stack-card {
+  position: absolute; /* Elles se superposent toutes au même point */
+  width: 200px;
+  height: 250px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+```
+
+---
+
+### 4. Action : Gérer la profondeur et la rotation
+Maintenant, donnons à chaque carte sa place dans la "pile" et une légère inclinaison.
+
+```css
+.card-back {
+  background-color: #34495e;
+  z-index: 1; /* Le plus bas */
+  top: 0;
+  left: 0;
+  transform: rotate(-10deg);
+}
+
+.card-mid {
+  background-color: var(--accent);
+  z-index: 2; /* Au milieu */
+  top: 10px;
+  left: 20px;
+  transform: rotate(-5deg);
+}
+
+.card-front {
+  background-color: #fff;
+  color: var(--bg);
+  z-index: 3; /* Le plus haut, au-dessus de tout le monde */
+  top: 20px;
+  left: 40px;
+  transform: rotate(0deg);
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Regardez bien comment les cartes se chevauchent. Essayez d'inverser les chiffres du `z-index` (mettez 10 à la carte arrière et 1 à la carte devant). Que se passe-t-il ? La carte sombre passera devant la blanche, même si elle a été écrite avant dans le code HTML !"
+
+**Vérification :**
+1. Voyez-vous bien l'effet "éventail" ?
+2. Est-ce que la carte blanche est bien au-dessus des deux autres ?
+
+**C'est la fin du Module 1 sur le Positionnement !**
 
 ---
 
