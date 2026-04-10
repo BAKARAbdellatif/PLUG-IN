@@ -322,6 +322,83 @@ Ajouter un bouton de chat flottant fixé en bas à droite de l'écran, qui reste
 
 ---
 
+# 🛠️ Exercice 1.3 — Élément fixe (Bouton flottant)
+
+L'objectif est de créer un bouton de support qui "flotte" au-dessus du contenu. Peu importe si l'utilisateur descend tout en bas de la page, ce bouton doit rester immobile et visible en bas à droite de son écran.
+
+### 1. Comprendre les outils
+Pour réussir cet effet, nous allons découvrir trois propriétés majeures :
+* **`position: fixed`** : Contrairement à `absolute`, cet élément ne se fixe pas par rapport à un parent, mais par rapport à la **fenêtre du navigateur** (le viewport). Il ne bouge jamais, même au scroll.
+* **`z-index`** : C'est l'ordre d'empilement. Imaginez des feuilles de papier : un élément avec un `z-index` de 100 sera "au-dessus" d'un élément avec un `z-index` de 1.
+* **`box-shadow`** : Permet d'ajouter une ombre pour donner l'impression que le bouton décolle de la page.
+
+
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez le bouton n'importe où dans votre fichier `index.html` (généralement juste avant la fermeture de la balise `</body>`).
+
+```html
+<button class="float-btn">💬 Support</button>
+```
+
+---
+
+### 3. Action : Fixer et styliser (CSS)
+Ajoutez ce code dans `style.css`. Nous allons d'abord le placer, puis lui donner son aspect "Premium".
+
+```css
+.float-btn {
+  /* ÉLÉMENT CLÉ : Le bouton ne suit plus le scroll de la page */
+  position: fixed;
+  
+  /* On le place à 30px du bord bas et 30px du bord droit de l'écran */
+  bottom: 30px;
+  right: 30px;
+  
+  /* On s'assure qu'il passe par-dessus tout le reste */
+  z-index: 1000;
+
+  /* Style visuel */
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 50px; /* Forme pilule */
+  font-weight: bold;
+  cursor: pointer;
+
+  /* Ombre pour l'effet de flottement (X Y Flou Couleur) */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+```
+
+---
+
+### 4. Action : Ajouter un effet interactif
+Pour que le bouton paraisse "vivant", ajoutons une petite transition simple.
+
+```css
+.float-btn {
+  /* ... code précédent ... */
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.float-btn:hover {
+  background-color: #7d6cf0; /* Une version légèrement plus claire de l'accent */
+  transform: scale(1.05);    /* Grossit très légèrement au survol */
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Pour bien voir l'effet `fixed`, vous avez besoin que votre page soit assez longue pour pouvoir scroller. Si votre page est trop courte, essayez d'ajouter plusieurs fois le bloc de l'avatar de l'exercice précédent pour créer de la hauteur. Vous verrez alors que tout défile, sauf votre bouton Support !"
+
+**Vérification :** Votre bouton est-il bien en bas à droite ? Est-ce qu'il reste là même si vous redimensionnez la fenêtre ? Si oui, bravo !
+
+
 ## Exercice 1.4 — Header sticky
 
 ### Objectif

@@ -102,3 +102,38 @@ body {
 .online {
   background-color: var(--success);
 }
+
+
+.float-btn {
+  /* ÉLÉMENT CLÉ : Le bouton ne suit plus le scroll de la page */
+  position: fixed;
+  
+  /* On le place à 30px du bord bas et 30px du bord droit de l'écran */
+  bottom: 30px;
+  right: 30px;
+  
+  /* On s'assure qu'il passe par-dessus tout le reste */
+  z-index: 1000;
+
+  /* Style visuel */
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 50px; /* Forme pilule */
+  font-weight: bold;
+  cursor: pointer;
+
+  /* Ombre pour l'effet de flottement (X Y Flou Couleur) */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.float-btn {
+  /* ... code précédent ... */
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.float-btn:hover {
+  background-color: #7d6cf0; /* Une version légèrement plus claire de l'accent */
+  transform: scale(1.05);    /* Grossit très légèrement au survol */
+}
