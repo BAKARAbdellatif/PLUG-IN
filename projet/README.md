@@ -682,6 +682,113 @@ Construire une barre de navigation avec logo, liens, et bouton — alignés avec
 
 ---
 
+# 🛠️ Exercice 2.1 — Navbar complète (Flexbox)
+
+Dans cet exercice, nous allons structurer une barre de navigation professionnelle. Au lieu de calculer des pixels pour espacer les éléments, nous allons laisser le navigateur faire les calculs pour nous.
+
+### 1. Comprendre les outils
+* **`display: flex`** : Transforme le conteneur en une ligne (par défaut).
+* **`justify-content: space-between`** : C'est l'outil ultime pour les barres de navigation. Il pousse le premier élément à gauche, le dernier à droite, et répartit le reste au milieu.
+* **`gap`** : C'est la propriété moderne qui remplace les `margin-right`. Elle définit l'espace exact *entre* les enfants d'un conteneur Flex, sans en ajouter à l'extérieur.
+* **`align-items: center`** : Assure que le logo, les liens et les boutons sont tous parfaitement alignés sur la même ligne horizontale, même s'ils n'ont pas la même hauteur.
+
+
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce code dans votre `index.html`. Remarquez qu'il y a trois groupes distincts : le **Brand**, le **Menu**, et les **Actions**.
+
+```html
+<nav class="navbar">
+  <div class="nav-brand">DevPulse</div>
+  
+  <div class="nav-menu">
+    <a href="#" class="nav-link">Accueil</a>
+    <a href="#" class="nav-link">Fonctionnalités</a>
+    <a href="#" class="nav-link">Tarifs</a>
+    <a href="#" class="nav-link">Blog</a>
+  </div>
+  
+  <div class="nav-actions">
+    <button class="btn-outline">Se connecter</button>
+    <button class="btn-primary">Essai gratuit</button>
+  </div>
+</nav>
+```
+
+---
+
+### 3. Action : Aligner la barre (CSS)
+Ajoutez ceci dans `style.css`. Regardez comment trois lignes de code organisent toute la structure :
+
+```css
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Espace entre les 3 blocs */
+  align-items: center;            /* Aligne tout verticalement */
+  
+  padding: 1rem 5%;
+  background-color: var(--surface);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* On organise l'intérieur du menu et des actions */
+.nav-menu, .nav-actions {
+  display: flex;
+  gap: 20px; /* L'espace magique entre les éléments */
+  align-items: center;
+}
+```
+
+---
+
+### 4. Action : Styliser les composants
+Pour que la barre ressemble à un vrai produit SaaS, appliquons des styles aux liens et aux boutons.
+
+```css
+.nav-link {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: var(--accent);
+}
+
+/* Bouton avec bordure uniquement */
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* Bouton plein (Primary) */
+.btn-primary {
+  background-color: var(--accent);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Essayez de supprimer `justify-content: space-between` de la classe `.navbar`. Vous verrez que tous vos blocs se collent à gauche. Remettez-le, puis changez la taille de votre fenêtre : l'espace entre le logo et le menu s'adapte automatiquement. C'est la magie du **Flex**."
+
+**Vérification :**
+1. Votre logo est-il bien à gauche et vos boutons à droite ?
+2. Y a-t-il bien un espace régulier entre vos liens grâce au `gap` ?
+
+
 ## Exercice 2.2 — Section pricing (3 colonnes)
 
 ### Objectif

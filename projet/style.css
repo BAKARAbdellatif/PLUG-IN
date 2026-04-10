@@ -228,3 +228,53 @@ body {
   left: 40px;
   transform: rotate(0deg);
 }
+
+
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Espace entre les 3 blocs */
+  align-items: center;            /* Aligne tout verticalement */
+  
+  padding: 1rem 5%;
+  background-color: var(--surface);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* On organise l'intérieur du menu et des actions */
+.nav-menu, .nav-actions {
+  display: flex;
+  gap: 20px; /* L'espace magique entre les éléments */
+  align-items: center;
+}
+
+
+.nav-link {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: var(--accent);
+}
+
+/* Bouton avec bordure uniquement */
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* Bouton plein (Primary) */
+.btn-primary {
+  background-color: var(--accent);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
