@@ -1,0 +1,62 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Variables — votre design system */
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface-2: #232734;
+  --border: #2e3345;
+  --text: #e2e4ed;
+  --text-muted: #8b8fa3;
+  --accent: #6c5ce7;
+  --success: #00cec9;
+  --danger: #ff6b6b;
+  --warning: #feca57;
+  --radius: 8px;
+}
+
+body {
+  font-family: sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.login-page {
+  /* On force la page à faire toute la hauteur du navigateur */
+  min-height: 100vh; 
+  
+  /* On active Flexbox */
+  display: flex;
+  
+  /* On aligne horizontalement ET verticalement */
+  justify-content: center;
+  align-items: center;
+}
+
+
+.login-box {
+  /* On utilise la variable de surface définie au début */
+  background-color: var(--surface); 
+  
+  /* On crée de l'espace autour du texte à l'intérieur de la boîte */
+  padding: 40px;
+  
+  /* On arrondit les angles */
+  border-radius: var(--radius);
+  
+  /* On centre le texte à l'intérieur de la boîte elle-même */
+  text-align: center;
+  
+  /* On ajoute une bordure fine pour définir les contours */
+  border: 1px solid var(--border);
+}
+
+/* Colorons le titre pour qu'il ressorte */
+.login-box h1 {
+  color: var(--accent);
+  margin-bottom: 8px;
+}
