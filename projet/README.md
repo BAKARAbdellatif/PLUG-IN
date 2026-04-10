@@ -1473,7 +1473,73 @@ Adapter la navbar (exercice 2.1) pour mobile : les liens passent en colonne, le 
 
 > **Concepts à utiliser** : `@media (max-width: ...)`, `flex-direction: column`, `width: 100%`
 
+
 ---
+
+# 🛠️ Exercice 4.1 — Les Media Queries (Adaptation Mobile)
+
+L'objectif est de transformer notre barre de navigation horizontale (conçue pour les ordinateurs) en un menu vertical adapté aux petits écrans des smartphones.
+
+### 1. Comprendre les outils
+* **`@media (max-width: 768px)`** : C'est une condition. On dit au navigateur : "Si la largeur de l'écran est inférieure ou égale à 768px, applique ces nouvelles règles CSS".
+* **`flex-direction: column`** : Par défaut, Flexbox aligne en ligne (`row`). En passant en `column`, on empile les éléments les uns sous les autres.
+* **`width: 100%`** : Sur mobile, les éléments étroits sont difficiles à cliquer. On force les boutons à occuper toute la largeur disponible pour une meilleure ergonomie (UX).
+
+
+
+---
+
+### 2. Action : Identifier la cible
+Nous allons modifier la structure que nous avons créée à l'**Exercice 2.1** (la `.navbar`). Assurez-vous d'avoir bien ce code HTML dans votre page.
+
+---
+
+### 3. Action : Écrire la Media Query (CSS)
+Ajoutez ce bloc **tout à la fin** de votre fichier `style.css`. 
+
+> **Important :** Les Media Queries se placent toujours après les styles par défaut pour pouvoir les "écraser" correctement.
+
+```css
+@media (max-width: 768px) {
+  .navbar {
+    /* On empile les 3 blocs (Logo, Menu, Actions) */
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .nav-menu {
+    /* Les liens passent aussi les uns sous les autres */
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-actions {
+    /* Les boutons s'empilent et prennent toute la place */
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .nav-actions button {
+    width: 100%; /* Boutons larges pour les pouces */
+  }
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Ouvrez l'inspecteur de votre navigateur (F12), activez le mode 'Responsive' (l'icône de téléphone) et réduisez la largeur. Vous allez voir un point de bascule précis à 768px. À cet instant, votre menu 'saute' d'un design horizontal à un design vertical. C'est ainsi que l'on crée des sites **Mobile-First**."
+
+**Vérification :**
+1. Est-ce que les liens du menu sont bien les uns sous les autres sur petit écran ?
+2. Les boutons "Se connecter" et "Essai gratuit" occupent-ils bien toute la largeur de la boîte ?
+3. Le design reste-t-il propre sur grand écran (il ne doit pas avoir changé) ?
+
+---
+
 
 ## Exercice 4.2 — Cacher/afficher selon l'écran
 
@@ -1492,7 +1558,76 @@ Sur mobile, cacher le texte des liens de la sidebar et ne garder que les icônes
 
 > **Concepts à utiliser** : `display: none`, `@media`, ajuster `grid-template-columns`
 
+
 ---
+
+# 🛠️ Exercice 4.2 — Cacher/Afficher (Responsive Sidebar)
+
+L'objectif est de transformer notre large barre latérale en une "mini-barre" d'icônes sur mobile. Nous allons apprendre à faire disparaître des éléments précis du HTML sans les supprimer.
+
+### 1. Comprendre les outils
+* **`display: none`** : C'est la propriété radicale. Elle retire l'élément de la page. Il est toujours dans le code HTML, mais le navigateur fait comme s'il n'existait pas (il ne prend plus de place).
+* **Réduction de la grille** : Nous allons modifier la structure `grid` du dashboard que nous avons créée à l'exercice 3.1 pour rétrécir la première colonne.
+* **`text-align: center`** ou **Flexbox** : Pour que les icônes ne flottent pas bizarrement une fois le texte disparu, il faudra s'assurer qu'elles restent bien au milieu de la petite barre.
+
+---
+
+### 2. Action : Modifier le HTML
+Pour pouvoir cibler uniquement le texte, nous devons l'envelopper dans une balise `<span>`. Modifiez vos liens dans la `sidebar` comme ceci :
+
+```html
+<li>
+  <a href="#">
+    <span class="icon">📊</span> 
+    <span class="link-text">Dashboard</span>
+  </a>
+</li>
+```
+
+---
+
+### 3. Action : Ajuster le CSS Mobile
+Nous allons retourner dans la **Media Query** créée à l'étape précédente (`@media (max-width: 768px)`) pour ajouter ces instructions spécifiques à la sidebar.
+
+```css
+@media (max-width: 768px) {
+  /* 1. On réduit la première colonne de la grille de 250px à 70px */
+  .dashboard {
+    grid-template-columns: 70px 1fr;
+  }
+
+  /* 2. On cache le texte des liens */
+  .link-text {
+    display: none;
+  }
+
+  /* 3. On centre les icônes dans la sidebar */
+  .sidebar {
+    padding: 20px 0; /* On réduit le padding latéral */
+    text-align: center;
+  }
+
+  .sidebar-menu li a {
+    padding: 15px 0;
+    font-size: 1.5rem; /* On grossit un peu l'icône pour le tactile */
+  }
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Regardez votre dashboard sur un écran large, puis réduisez la fenêtre. Vous allez voir la sidebar se rétracter d'un coup. Le texte 'Dashboard', 'Utilisateurs', etc., disparaît totalement, ne laissant que les émojis. C'est exactement ce que font des applications comme Slack ou Discord pour s'adapter aux petits écrans !"
+
+**Vérification :**
+1. Sur mobile, la sidebar est-elle devenue une fine bande à gauche ?
+2. Les icônes sont-elles bien visibles et centrées ?
+3. Le texte réapparaît-il bien dès que vous agrandissez la fenêtre ?
+
+---
+
+**Astuce pédagogique :** Expliquez à vos étudiants que `display: none` est différent de `visibility: hidden`. `hidden` cache l'élément mais laisse un trou vide, alors que `none` compacte tout comme si l'élément n'était plus là.
+
 
 ## Exercice 4.3 — Images responsives
 

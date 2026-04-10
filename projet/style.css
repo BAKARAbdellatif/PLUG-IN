@@ -499,3 +499,55 @@ body {
   color: #ff7675; /* Rouge */
   background-color: rgba(255, 118, 117, 0.1);
 }
+
+
+@media (max-width: 768px) {
+  .navbar {
+    /* On empile les 3 blocs (Logo, Menu, Actions) */
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .nav-menu {
+    /* Les liens passent aussi les uns sous les autres */
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-actions {
+    /* Les boutons s'empilent et prennent toute la place */
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .nav-actions button {
+    width: 100%; /* Boutons larges pour les pouces */
+  }
+}
+
+
+@media (max-width: 768px) {
+  /* 1. On réduit la première colonne de la grille de 250px à 70px */
+  .dashboard {
+    grid-template-columns: 70px 1fr;
+  }
+
+  /* 2. On cache le texte des liens */
+  .link-text {
+    display: none;
+  }
+
+  /* 3. On centre les icônes dans la sidebar */
+  .sidebar {
+    padding: 20px 0; /* On réduit le padding latéral */
+    text-align: center;
+  }
+
+  .sidebar-menu li a {
+    padding: 15px 0;
+    font-size: 1.5rem; /* On grossit un peu l'icône pour le tactile */
+  }
+}
