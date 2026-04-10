@@ -213,6 +213,94 @@ Créer un avatar utilisateur avec un badge "en ligne" (point vert) positionné e
 
 > **Concepts à utiliser** : `position: relative` (parent), `position: absolute` (enfant), `bottom`, `right`, `border-radius`
 
+# 🛠️ Exercice 1.2 — Superposition avec position "Absolute"
+
+Dans cet exercice, nous allons apprendre à superposer des éléments. L'objectif est de placer un badge de statut (un petit point vert) par-dessus l'image de profil d'un utilisateur, précisément en bas à droite.
+
+### 1. Comprendre les outils
+Pour superposer des éléments, on utilise le système de positionnement :
+* **`position: relative` (Le Parent)** : On définit l'élément parent comme le "cadre" de référence. C'est l'ancre. Tout ce qui sera à l'intérieur se positionnera par rapport aux bords de ce cadre.
+* **`position: absolute` (L'Enfant)** : On retire l'élément du flux normal de la page pour le faire "flotter". On utilise ensuite `top`, `bottom`, `left` ou `right` pour lui dire exactement où se placer par rapport à son parent.
+* **`border-radius: 50%`** : Transforme n'importe quel carré parfait en un cercle parfait.
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce code dans votre fichier `index.html` (vous pouvez le mettre à la suite de l'exercice précédent ou dans une nouvelle section) :
+
+```html
+<div class="avatar-wrapper">
+  <img src="https://i.pravatar.cc/64?img=3" alt="Avatar" class="avatar-img">
+  <span class="status-badge online"></span>
+</div>
+```
+
+---
+
+### 3. Action : Préparer l'Avatar (CSS)
+Ouvrez `style.css`. Nous allons d'abord donner sa forme à l'image et préparer son conteneur.
+
+```css
+.avatar-wrapper {
+  /* ÉLÉMENT CLÉ : On définit le repère pour le badge */
+  position: relative; 
+  
+  width: 64px;
+  height: 64px;
+  margin: 20px; /* Un peu d'espace autour */
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  
+  /* On transforme l'image carrée en rond */
+  border-radius: 50%; 
+  object-fit: cover;
+}
+```
+
+> **Observation :** Pour l'instant, vous ne voyez pas le badge. C'est normal, il fait 0 pixel de large et n'a pas de couleur !
+
+---
+
+### 4. Action : Positionner le Badge (Absolute)
+C'est ici que la magie opère. Nous allons forcer le badge à se placer par-dessus l'image.
+
+```css
+.status-badge {
+  /* On détache le badge pour le placer librement */
+  position: absolute; 
+  
+  /* On le place en bas à droite du parent (.avatar-wrapper) */
+  bottom: 2px;
+  right: 2px;
+  
+  /* On définit sa forme de petit cercle */
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  
+  /* On ajoute une bordure pour qu'il se détache de l'image */
+  border: 2px solid var(--surface);
+}
+
+/* On applique la couleur verte uniquement si la classe .online est présente */
+.online {
+  background-color: var(--success);
+}
+```
+
+---
+
+### 💡 Le saviez-vous ? (Note pour l'étudiant)
+Si vous oubliez de mettre `position: relative` sur le parent (`.avatar-wrapper`), votre badge ne saura plus où se fixer. Il remontera de parent en parent jusqu'à se coller tout en bas à droite de votre **page entière** (le `body`) ! 
+
+**Retenez bien :** L'enfant *Absolute* cherche toujours le premier parent *Relative* qu'il trouve pour s'y accrocher.
+
+---
+
+**Actualisez votre page !** Vous devriez voir l'avatar de l'utilisateur avec son petit témoin vert indiquant qu'il est connecté. 
 ---
 
 ## Exercice 1.3 — Élément fixe (bouton flottant)

@@ -60,3 +60,45 @@ body {
   color: var(--accent);
   margin-bottom: 8px;
 }
+
+
+.avatar-wrapper {
+  /* ÉLÉMENT CLÉ : On définit le repère pour le badge */
+  position: relative; 
+  
+  width: 64px;
+  height: 64px;
+  margin: 20px; /* Un peu d'espace autour */
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  
+  /* On transforme l'image carrée en rond */
+  border-radius: 50%; 
+  object-fit: cover;
+}
+
+
+.status-badge {
+  /* On détache le badge pour le placer librement */
+  position: absolute; 
+  
+  /* On le place en bas à droite du parent (.avatar-wrapper) */
+  bottom: 2px;
+  right: 2px;
+  
+  /* On définit sa forme de petit cercle */
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  
+  /* On ajoute une bordure pour qu'il se détache de l'image */
+  border: 2px solid var(--surface);
+}
+
+/* On applique la couleur verte uniquement si la classe .online est présente */
+.online {
+  background-color: var(--success);
+}
