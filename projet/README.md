@@ -1755,7 +1755,97 @@ Dans une liste de notifications, le texte long est tronqué avec "..." sur une s
 
 > **Concepts à utiliser** : `white-space: nowrap`, `overflow: hidden`, `text-overflow: ellipsis`, `flex: 1`, `min-width: 0`
 
+
 ---
+
+# 🛠️ Exercice 5.1 — Texte tronqué (Ellipsis)
+
+L'objectif est de créer une liste de notifications élégante. Si un message de log est trop long, il ne doit pas s'étendre à l'infini : il doit se terminer proprement par "..." tout en restant sur une seule ligne.
+
+### 1. Comprendre les outils
+Pour tronquer du texte en CSS, il faut combiner **3 propriétés obligatoires** :
+* **`white-space: nowrap`** : Interdit au texte de passer à la ligne. Il reste sur une seule ligne, même s'il dépasse.
+* **`overflow: hidden`** : Cache tout ce qui dépasse du cadre de la boîte.
+* **`text-overflow: ellipsis`** : Ajoute automatiquement les trois petits points "..." à la fin de la zone visible.
+
+> **Le piège de Flexbox** : Pour que cela fonctionne dans un parent Flex, l'élément qui contient le texte doit avoir un `min-width: 0`. Sans cela, il refuse de rétrécir et poussera les autres éléments hors de l'écran.
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc dans votre zone de contenu principal (`.main-content`) :
+
+```html
+<div class="notification-list">
+  <div class="notif-item">
+    <span class="notif-icon">🔔</span>
+    <span class="notif-text">Déploiement v2.4.1 réussi sur le serveur de production EU-West après la migration</span>
+    <span class="notif-time">2min</span>
+  </div>
+  
+  <div class="notif-item">
+    <span class="notif-icon">⚠️</span>
+    <span class="notif-text">Alerte CPU : le worker-03 a dépassé 80% d'utilisation pendant plus de 5 minutes consécutives</span>
+    <span class="notif-time">15min</span>
+  </div>
+  
+  <div class="notif-item">
+    <span class="notif-icon">❌</span>
+    <span class="notif-text">Build failed sur la branche feature/auth-oauth2 — 3 tests en erreur</span>
+    <span class="notif-time">1h</span>
+  </div>
+</div>
+```
+
+---
+
+### 3. Action : Dompter le texte (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+.notification-list {
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  margin-top: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.notif-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.notif-text {
+  flex: 1; /* Prend tout l'espace disponible */
+  color: var(--text);
+  
+  /* --- LA MAGIE DE L'ELLIPSIS --- */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0; /* INDISPENSABLE pour que flex accepte de tronquer */
+}
+
+.notif-time {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  flex-shrink: 0; /* Empêche l'heure d'être écrasée par le texte long */
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Essayez de réduire la largeur de votre navigateur. Vous verrez le texte de la notification se raccourcir et les '...' apparaître dynamiquement. Sans le `min-width: 0`, vous remarqueriez que le texte 'pousse' le temps (2min, 15min) en dehors de la boîte. C'est une astuce de développeur senior à bien retenir !"
+
+**Vérification :**
+1. Toutes les notifications tiennent-elles bien sur une seule ligne ?
+2. Voyez-vous bien les "..." à la fin des phrases longues ?
+3. Le temps (ex: "2min") est-il toujours visible à droite ?
+
 
 ## Exercice 5.2 — Troncature multi-lignes
 
@@ -1780,6 +1870,74 @@ Afficher des descriptions de cartes limitées à 3 lignes maximum.
 > **Concepts à utiliser** : `display: -webkit-box`, `-webkit-line-clamp: 3`, `-webkit-box-orient: vertical`, `overflow: hidden`
 
 ---
+
+# 🛠️ Exercice 5.2 — Troncature multi-lignes (Line Clamp)
+
+L'objectif est d'afficher un paragraphe de description, mais de forcer l'arrêt à la 3ème ligne avec les trois petits points "...", même si le texte original est beaucoup plus long.
+
+### 1. Comprendre les outils
+Cette technique utilise des propriétés un peu particulières (préfixées par `-webkit-`) qui sont devenues un standard pour tous les navigateurs modernes :
+* **`display: -webkit-box`** : Transforme l'élément en une boîte flexible spéciale capable de gérer le bridage.
+* **`-webkit-line-clamp: 3`** : C'est ici que l'on définit le nombre maximum de lignes visibles.
+* **`-webkit-box-orient: vertical`** : Indique au navigateur que l'empilement du texte se fait verticalement.
+* **`overflow: hidden`** : Indispensable pour masquer physiquement le texte qui dépasse de la 3ème ligne.
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc dans votre zone de contenu, par exemple sous vos notifications :
+
+```html
+<div class="card-desc">
+  <h3>Description du projet</h3>
+  <p class="clamp-text">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor 
+    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
+    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
+    dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+    mollit anim id est laborum.
+  </p>
+</div>
+```
+
+---
+
+### 3. Action : Brider le texte (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+.card-desc {
+  background-color: var(--surface);
+  padding: 20px;
+  border-radius: var(--radius);
+  max-width: 400px; /* On limite la largeur pour mieux voir l'effet */
+  margin-top: 20px;
+}
+
+.clamp-text {
+  /* --- LA MAGIE DU MULTI-LIGNE --- */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;           /* Limite à 3 lignes précisément */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  
+  /* Style optionnel pour la lisibilité */
+  line-height: 1.5; 
+  color: var(--text-muted);
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Comptez les lignes de votre paragraphe. Normalement, il devrait s'arrêter pile à la fin de la troisième ligne. Essayez de changer la valeur `-webkit-line-clamp: 3` par `2` ou `1`. C'est une méthode extrêmement puissante pour garder des cartes de même hauteur dans un dashboard, quel que soit le contenu envoyé par la base de données !"
+
+**Vérification :**
+1. Votre texte s'arrête-t-il bien à la 3ème ligne ?
+2. Voyez-vous les "..." à la fin de la dernière ligne visible ?
+3. Si vous agrandissez la largeur de la fenêtre, le texte s'adapte-t-il toujours à cette limite ?
+
 
 ## Exercice 5.3 — Scroll interne (liste d'activité)
 
@@ -1813,7 +1971,122 @@ Créer un panel d'activité récente avec scroll interne et scrollbar custom.
 
 > **Concepts à utiliser** : `max-height`, `overflow-y: auto`, `::-webkit-scrollbar`, `border-bottom`
 
+
 ---
+
+# 🛠️ Exercice 5.3 — Scroll interne et Scrollbar custom
+
+L'objectif est de créer un journal d'activité (logs) qui ne s'étend pas à l'infini vers le bas. Nous allons limiter sa hauteur et personnaliser la barre de défilement pour qu'elle s'intègre parfaitement au design sombre de **DevPulse**.
+
+### 1. Comprendre les outils
+* **`max-height`** : On définit une limite de hauteur. Si le contenu est plus petit, la boîte s'adapte. S'il est plus grand, la boîte s'arrête là.
+* **`overflow-y: auto`** : Indique au navigateur d'ajouter une barre de défilement verticale uniquement si le contenu dépasse la hauteur fixée.
+* **`::-webkit-scrollbar`** : Une famille de propriétés spéciales qui permettent de styliser la barre de défilement (largeur, couleur du fond, couleur du curseur).
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce panel dans votre zone de contenu principal (`.main-content`) :
+
+```html
+<div class="activity-panel">
+  <h3>Activité récente</h3>
+  <div class="activity-scroll">
+    <div class="activity-item"><span>🔔 Déploiement v2.4.1 réussi</span><span class="badge badge-success">OK</span></div>
+    <div class="activity-item"><span>⚠️ CPU > 80% sur worker-03</span><span class="badge badge-warning">Warn</span></div>
+    <div class="activity-item"><span>🔔 PR #847 mergé par Alice</span><span class="badge badge-success">OK</span></div>
+    <div class="activity-item"><span>❌ Build failed sur staging</span><span class="badge badge-danger">Fail</span></div>
+    <div class="activity-item"><span>🔔 Migration DB terminée</span><span class="badge badge-success">OK</span></div>
+    <div class="activity-item"><span>⚠️ SSL expire dans 7 jours</span><span class="badge badge-warning">Warn</span></div>
+    <div class="activity-item"><span>🔔 Backup quotidien OK</span><span class="badge badge-success">OK</span></div>
+    <div class="activity-item"><span>❌ Timeout /api/reports</span><span class="badge badge-danger">Fail</span></div>
+    <div class="activity-item"><span>🔔 Scale up: 3→5 replicas</span><span class="badge badge-success">OK</span></div>
+    <div class="activity-item"><span>⚠️ Rate limit client-42</span><span class="badge badge-warning">Warn</span></div>
+  </div>
+</div>
+```
+
+---
+
+### 3. Action : Créer la zone de scroll (CSS)
+Ajoutez ces règles pour limiter la hauteur et styliser les éléments :
+
+```css
+.activity-panel {
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  max-width: 500px;
+  margin-top: 30px;
+}
+
+.activity-scroll {
+  /* On limite la hauteur et on active le scroll */
+  max-height: 280px;
+  overflow-y: auto;
+  margin-top: 15px;
+  padding-right: 10px; /* Espace pour la scrollbar */
+}
+
+.activity-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.2s;
+}
+
+.activity-item:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+```
+
+---
+
+### 4. Action : Personnaliser la barre de défilement
+Par défaut, la scrollbar est grise et épaisse. Rendons-la plus discrète :
+
+```css
+/* 1. Largeur de la barre */
+.activity-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* 2. Fond de la barre (piste) */
+.activity-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+/* 3. La partie qui bouge (curseur) */
+.activity-scroll::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+/* Style des badges */
+.badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+.badge-success { background: rgba(0, 184, 148, 0.2); color: var(--success); }
+.badge-warning { background: rgba(253, 203, 110, 0.2); color: #fdcb6e; }
+.badge-danger { background: rgba(214, 48, 49, 0.2); color: #d63031; }
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Essayez de faire défiler la liste avec votre souris. Vous voyez la fine barre violette ? C'est beaucoup plus élégant que la barre grise standard du navigateur. Notez aussi que le titre 'Activité récente' reste fixe en haut car il n'est pas dans la zone `.activity-scroll` : c'est un excellent moyen de garder le contexte visible."
+
+**Vérification :**
+1. Votre panel s'arrête-t-il bien à une certaine hauteur ?
+2. La scrollbar est-elle bien colorée (couleur accent) ?
+3. Le défilement est-il fluide ?
+
 
 ---
 
@@ -1843,7 +2116,92 @@ Créer une carte "hero" avec un dégradé en fond et une ombre portée.
 
 > **Concepts à utiliser** : `background: linear-gradient(135deg, ...)`, `box-shadow`, `border-radius`, `color`
 
+
 ---
+
+# 🛠️ Exercice 6.1 — Gradients et Ombres (Le relief)
+
+Dans cet exercice, nous allons créer une pièce maîtresse pour notre dashboard : une carte "Hero". Contrairement aux cartes classiques, celle-ci doit attirer l'œil immédiatement grâce à un dégradé de couleurs dynamique et une ombre qui donne l'impression qu'elle flotte au-dessus de la page.
+
+### 1. Comprendre les outils
+* **`linear-gradient`** : Permet de créer une transition douce entre deux ou plusieurs couleurs. L'angle `135deg` permet d'orienter le dégradé en diagonale (du haut à gauche vers le bas à droite).
+* **`box-shadow`** : Cette propriété prend 4 valeurs principales :
+    1.  Le décalage horizontal (X).
+    2.  Le décalage vertical (Y).
+    3.  Le flou (Blur).
+    4.  La couleur (souvent avec de la transparence via `rgba`).
+* **La hiérarchie visuelle** : Un fond coloré impose d'utiliser une couleur de texte contrastée (souvent blanc pur) pour garantir la lisibilité.
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc en haut de votre zone `.main-content`. C'est l'élément qui accueillera vos utilisateurs.
+
+```html
+<div class="hero-card">
+  <h2>Bienvenue sur DevPulse</h2>
+  <p>Monitorez vos services et vos déploiements en temps réel avec une précision chirurgicale.</p>
+  <button class="btn-hero">Commencer l'analyse</button>
+</div>
+```
+
+---
+
+### 3. Action : Ajouter du style et du relief (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+.hero-card {
+  /* 1. Le dégradé : de la couleur accent vers la couleur success en diagonale */
+  background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
+  
+  /* 2. L'ombre : décalée vers le bas pour l'effet de hauteur */
+  box-shadow: 0 20px 40px rgba(108, 92, 231, 0.3);
+  
+  /* 3. Mise en forme */
+  padding: 40px;
+  border-radius: calc(var(--radius) * 2); /* On accentue l'arrondi pour le style */
+  color: white;
+  margin-bottom: 30px;
+}
+
+.hero-card h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.hero-card p {
+  opacity: 0.9;
+  margin-bottom: 25px;
+  max-width: 500px;
+}
+
+.btn-hero {
+  background-color: white;
+  color: var(--accent);
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-hero:hover {
+  transform: translateY(-3px); /* Petit effet de saut au survol */
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Regardez comment l'ombre (`box-shadow`) utilise une version transparente de la couleur violette (`rgba`) au lieu d'un noir pur. C'est le secret des designs professionnels : les ombres colorées paraissent beaucoup plus naturelles et moins 'sales' que les ombres grises. L'effet de profondeur est ainsi bien plus convaincant."
+
+**Vérification :**
+1. Votre carte affiche-t-elle bien une transition du violet vers le vert ?
+2. L'ombre est-elle bien visible sous la carte, lui donnant un effet de relief ?
+3. Le texte blanc est-il bien lisible sur le fond coloré ?
+
 
 ## Exercice 6.2 — Filtres et transparence
 
@@ -1868,7 +2226,93 @@ Créer un overlay sombre sur une image, avec du texte par-dessus et un effet blu
 
 > **Concepts à utiliser** : `position: relative/absolute`, `filter: blur() brightness()`, `inset: 0`
 
+
 ---
+
+# 🛠️ Exercice 6.2 — Filtres et Transparence (L'effet Overlay)
+
+L'objectif est de placer du texte par-dessus une image sans que celle-ci ne gêne la lecture. Pour y arriver, nous allons "préparer" l'image avec des filtres (flou et assombrissement) avant de poser le texte au centre.
+
+### 1. Comprendre les outils
+* **`filter: brightness(0.5)`** : Réduit la luminosité de l'image (ici à 50%). Cela permet au texte blanc de ressortir (contraste).
+* **`filter: blur(2px)`** : Ajoute un léger flou. Cela aide l'œil à ignorer les détails de l'image pour se concentrer sur le texte.
+* **`position: absolute` + `inset: 0`** : `inset: 0` est un raccourci moderne pour dire `top: 0; right: 0; bottom: 0; left: 0;`. Cela force l'overlay à recouvrir exactement toute la surface de son parent.
+* **`pointer-events: none`** (optionnel) : Permet aux clics de traverser l'overlay pour atteindre l'image ou les liens en dessous si besoin.
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc dans votre zone `.main-content`. Il contient l'image et la couche (l'overlay) qui portera le texte.
+
+```html
+<div class="image-overlay-container">
+  <img src="https://picsum.photos/800/300" alt="Cover" class="cover-img">
+  <div class="overlay">
+    <h2>Dashboard Analytics</h2>
+    <p>Vue d'ensemble de vos métriques et performances</p>
+  </div>
+</div>
+```
+
+---
+
+### 3. Action : Superposer et Filtrer (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+.image-overlay-container {
+  position: relative; /* Indispensable pour que l'overlay se cale dessus */
+  width: 100%;
+  height: 300px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 30px;
+}
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  
+  /* --- FILTRES : Assombrir et Flouter --- */
+  filter: brightness(0.5) blur(2px);
+  
+  /* On augmente légèrement l'échelle pour éviter les bords blancs du flou */
+  transform: scale(1.05); 
+}
+
+.overlay {
+  /* On couvre toute la zone */
+  position: absolute;
+  inset: 0; 
+  
+  /* On centre le texte horizontalement et verticalement */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.overlay h2 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Sécurité supplémentaire pour la lisibilité */
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Essayez de retirer temporairement la ligne `filter: brightness(0.5)`. Vous verrez que si l'image générée par Picsum est claire, votre texte blanc devient soudainement illisible. Les filtres CSS sont vos meilleurs alliés pour garantir l'accessibilité de vos interfaces sans avoir à modifier vos images manuellement dans Photoshop."
+
+**Vérification :**
+1. L'image remplit-elle bien tout le conteneur ?
+2. Le texte est-il parfaitement centré sur l'image ?
+3. L'image paraît-elle un peu sombre et floue par rapport à une image normale ?
 
 ---
 
@@ -1900,7 +2344,99 @@ Créer une série de boutons qui montrent chaque état d'interaction.
 
 > **Concepts à utiliser** : `:hover`, `:focus`, `:active`, `:disabled`, `transition`, `transform`, `opacity`, `cursor`
 
+
 ---
+
+# 🛠️ Exercice 7.1 — Les états d'interaction (Boutons)
+
+L'objectif est de styliser les quatre moments clés de la vie d'un bouton. Un bon bouton doit "répondre" visuellement à chaque action de l'utilisateur.
+
+### 1. Comprendre les outils
+* **`:hover`** : L'utilisateur survole l'élément avec sa souris. C'est l'indice visuel que l'élément est cliquable.
+* **`:focus`** : L'élément est sélectionné (souvent via la touche `Tab`). C'est **crucial pour l'accessibilité**.
+* **`:active`** : Le moment précis où l'on clique (le bouton est enfoncé).
+* **`:disabled`** : Le bouton est présent mais inutilisable (ex: formulaire incomplet).
+* **`transition`** : Permet d'éviter les changements de couleur trop "bruts" en animant le passage d'un état à l'autre.
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez cette vitrine de boutons dans votre zone de contenu :
+
+```html
+<div class="btn-showcase">
+  <button class="btn btn-primary">Primary</button>
+  <button class="btn btn-outline">Outline</button>
+  <button class="btn btn-danger">Supprimer</button>
+  <button class="btn btn-primary" disabled>Désactivé</button>
+</div>
+```
+
+---
+
+### 3. Action : Animer les interactions (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+.btn-showcase {
+  display: flex;
+  gap: 15px;
+  padding: 30px;
+  background-color: var(--surface);
+  border-radius: var(--radius);
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  /* ÉLÉMENT CLÉ : On anime toutes les propriétés sur 0.2 seconde */
+  transition: all 0.2s ease;
+  outline: none; /* On enlève l'outline par défaut pour le personnaliser */
+}
+
+/* --- ÉTAT : HOVER (Survol) --- */
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px); /* Le bouton monte légèrement */
+  filter: brightness(1.1);      /* Il devient un peu plus clair */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* --- ÉTAT : FOCUS (Accessibilité Clavier) --- */
+.btn:focus {
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.5); /* "Ring" autour du bouton */
+}
+
+/* --- ÉTAT : ACTIVE (Clic enfoncé) --- */
+.btn:active:not(:disabled) {
+  transform: translateY(0); /* Il redescend */
+  scale: 0.96;              /* Il rétrécit légèrement (effet de pression) */
+}
+
+/* --- ÉTAT : DISABLED (Désactivé) --- */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);     /* On enlève la couleur */
+}
+
+/* Couleurs spécifiques */
+.btn-primary { background-color: var(--accent); color: white; }
+.btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+.btn-danger  { background-color: #ff7675; color: white; }
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Testez chaque bouton un par un. Survoler-les, cliquez sans relâcher la souris (état `active`), et essayez d'utiliser la touche **Tab** de votre clavier pour voir l'état `focus`. Notez que le bouton 'Désactivé' ne réagit à rien : c'est grâce au sélecteur `:not(:disabled)` qui empêche les effets de survol de s'appliquer."
+
+**Vérification :**
+1. Vos boutons montent-ils d'un pixel ou deux quand vous les survolez ?
+2. Le bouton "Désactivé" affiche-t-il bien un curseur d'interdiction 🚫 ?
+3. Le clic donne-t-il bien une impression de "bouton physique" qui s'enfonce ?
 
 ## Exercice 7.2 — Inputs avec états de focus et validation
 
@@ -1938,6 +2474,110 @@ Styliser des inputs de formulaire avec des états visuels clairs.
 
 ---
 
+# 🛠️ Exercice 7.2 — Inputs et Validation (Feedback visuel)
+
+L'objectif est de styliser des champs de saisie qui réagissent à l'utilisateur. Nous allons apprendre à créer cet effet de "halo lumineux" (le ring) lors du clic, très commun dans les designs modernes comme ceux de Tailwind ou de GitHub.
+
+### 1. Comprendre les outils
+* **`outline: none`** : On retire la bordure bleue par défaut des navigateurs pour la remplacer par quelque chose de plus esthétique.
+* **`box-shadow` avec "spread"** : Pour créer le halo, on utilise une ombre sans décalage (X=0, Y=0) mais avec un étalement (4ème valeur). Cela crée une bordure extérieure fluide.
+* **Transitions ciblées** : On ne fait pas seulement varier la couleur de la bordure, mais aussi l'ombre pour un effet de "douceur".
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce formulaire de démonstration dans votre zone de contenu. Il présente trois états : normal, erreur et succès.
+
+```html
+<div class="form-demo">
+  <div class="form-group">
+    <label>Email professionnel</label>
+    <input type="email" placeholder="nom@entreprise.com" class="input">
+  </div>
+
+  <div class="form-group">
+    <label>Email (erreur)</label>
+    <input type="email" value="abakar.dev" class="input input-error">
+    <span class="error-msg">Format d'adresse invalide</span>
+  </div>
+
+  <div class="form-group">
+    <label>Email (succès)</label>
+    <input type="email" value="contact@devpulse.ma" class="input input-success">
+    <span class="success-msg">Email vérifié ✓</span>
+  </div>
+</div>
+```
+
+---
+
+### 3. Action : Styliser les champs (CSS)
+Ajoutez ces règles dans votre fichier `style.css`. Notez l'utilisation du "halo" sur le focus.
+
+```css
+.form-demo {
+  max-width: 400px;
+  background-color: var(--surface);
+  padding: 30px;
+  border-radius: var(--radius);
+  margin-top: 30px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.input {
+  background-color: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 12px 15px;
+  border-radius: var(--radius);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* --- ÉTAT : FOCUS (Le halo) --- */
+.input:focus {
+  border-color: var(--accent);
+  /* box-shadow: X Y Blur Spread Color */
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+}
+
+/* --- ÉTAT : ERREUR --- */
+.input-error {
+  border-color: #ff7675;
+}
+.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(255, 118, 117, 0.2);
+}
+.error-msg { color: #ff7675; font-size: 0.8rem; }
+
+/* --- ÉTAT : SUCCÈS --- */
+.input-success {
+  border-color: var(--success);
+}
+.success-msg { color: var(--success); font-size: 0.8rem; }
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Cliquez dans le premier champ. Vous voyez comment la bordure s'illumine doucement ? C'est le mélange entre `border-color` et `box-shadow`. Remarquez aussi que pour l'état d'erreur, nous avons changé la couleur du halo en rouge. C'est ce qu'on appelle la **cohérence visuelle** : la couleur doit toujours porter le sens de l'action."
+
+**Vérification :**
+1. Vos champs de saisie sont-ils bien alignés verticalement ?
+2. Le halo (ring) apparaît-il bien au clic (focus) ?
+3. Les messages d'erreur et de succès sont-ils bien positionnés sous les inputs ?
+
 ---
 
 # 🎬 MODULE 8 — Animations & Transitions
@@ -1956,7 +2596,64 @@ Les cards de stats (exercice 3.2) ont un hover animé : translation vers le haut
 
 > **Concepts à utiliser** : `transition: property duration easing`, `transform: translateY()`, `box-shadow`
 
+
 ---
+
+# 🛠️ Exercice 8.1 — Transitions "Smooth" (Effets au survol)
+
+L'objectif est d'ajouter une sensation de légèreté à nos cartes de statistiques. Au lieu d'un changement brutal, la carte va sembler "décoller" du tableau de bord lorsque la souris passe dessus.
+
+### 1. Comprendre les outils
+* **`transition`** : C'est le chef d'orchestre. Elle définit **quelle** propriété doit s'animer (ex: `transform`), pendant **combien de temps** (`0.2s`) et selon **quel rythme** (`ease`).
+* **`transform: translateY(-4px)`** : Déplace l'élément sur l'axe vertical. Une valeur négative fait "monter" l'élément vers le haut de l'écran.
+* **`ease`** : C'est un timing-function qui commence doucement, accélère, puis finit doucement. C'est ce qui rend l'animation plus "humaine" et moins mécanique.
+
+
+
+---
+
+### 2. Action : Cibler les cartes de l'exercice 3.2
+Nous allons reprendre la classe `.stat-card`. Assurez-vous d'ajouter la transition sur l'état **par défaut** de la carte (pas sur le hover), sinon l'animation ne fonctionnera que dans un sens !
+
+---
+
+### 3. Action : Animer l'élévation (CSS)
+Ajoutez ces propriétés à vos styles existants dans `style.css` :
+
+```css
+.stat-card {
+  /* ... vos styles précédents (background, padding, etc.) ... */
+
+  /* ÉLÉMENT CLÉ : On prépare le terrain pour l'animation */
+  /* On liste les propriétés à animer pour de meilleures performances */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  
+  cursor: pointer;
+  will-change: transform; /* Astuce pour aider le navigateur à fluidifier l'animation */
+}
+
+/* --- ÉTAT AU SURVOL (Hover) --- */
+.stat-card:hover {
+  /* La carte monte de 4 pixels */
+  transform: translateY(-4px);
+  
+  /* L'ombre devient plus floue et plus large pour simuler l'éloignement du fond */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+  
+  /* On peut aussi colorer légèrement la bordure */
+  border-color: var(--accent);
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Passez votre souris rapidement sur les différentes cartes. Voyez-vous comment elles semblent flotter ? Essayez de changer `0.2s` par `1s`. Vous verrez que l'effet devient très lent, presque lourd. Le secret d'une bonne interface utilisateur (UI), c'est de rester entre **0.1s et 0.3s** : l'utilisateur doit sentir le mouvement sans avoir à l'attendre."
+
+**Vérification :**
+1. Vos cartes montent-elles bien au survol ?
+2. Redescendent-elles avec la même fluidité quand vous retirez la souris ?
+3. L'ombre s'accentue-t-elle bien pendant le mouvement ?
 
 ## Exercice 8.2 — Fade in / Slide in (animations d'entrée)
 
@@ -1970,7 +2667,88 @@ Les stat cards apparaissent avec une animation de fade + slide au chargement de 
 
 > **Concepts à utiliser** : `@keyframes`, `animation`, `animation-delay`, `animation-fill-mode: forwards`
 
+
 ---
+
+# 🛠️ Exercice 8.2 — Fade & Slide (Animations d'entrée)
+
+L'objectif est de faire apparaître nos cartes de statistiques de manière progressive. Au lieu de s'afficher brutalement, elles vont "glisser" du bas vers le haut tout en devenant opaques. Pour un effet encore plus premium, nous allons les faire apparaître les unes après les autres (**effet Staggered**).
+
+### 1. Comprendre les outils
+* **`@keyframes`** : C'est le script de votre animation. On définit l'état de départ (`from`) et l'état d'arrivée (`to`).
+* **`animation-fill-mode: forwards`** : Très important ! Cela dit à l'élément de rester dans l'état final de l'animation (opaque et placé) au lieu de revenir à son état initial (invisible).
+* **`animation-delay`** : Permet de retarder le début de l'animation. C'est ce qui crée l'effet de cascade.
+
+
+
+---
+
+### 2. Action : Définir l'animation (CSS)
+Ajoutez d'abord la "recette" de l'animation en haut ou en bas de votre fichier `style.css` :
+
+```css
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Part de 20px plus bas */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);    /* Arrive à sa place réelle */
+  }
+}
+```
+
+---
+
+### 3. Action : Appliquer l'animation aux cartes
+Maintenant, lions cette animation aux `.stat-card` :
+
+```css
+.stat-card {
+  /* ... vos styles précédents ... */
+
+  /* On cache la carte par défaut pour que l'animation la révèle */
+  opacity: 0; 
+  
+  /* Nom | Durée | Rythme | Direction finale */
+  animation: fadeSlideUp 0.5s ease-out forwards;
+}
+```
+
+---
+
+### 4. Action : Créer l'effet de cascade (Stagger)
+Pour que les cartes ne montent pas toutes en même temps, nous allons ajouter un petit délai différent pour chacune :
+
+```css
+/* La 1ère carte part tout de suite (déjà défini) */
+
+.stat-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.stat-card:nth-child(4) {
+  animation-delay: 0.3s;
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Actualisez votre page (F5). Vous voyez ce mouvement fluide ? Les cartes semblent 'pleuvoir' sur l'écran. C'est l'utilisation du `nth-child` qui permet de créer ce rythme sans avoir à créer 4 classes différentes dans votre HTML. C'est propre, efficace et très agréable pour l'utilisateur."
+
+**Vérification :**
+1. Les cartes sont-elles invisibles au tout début du chargement ?
+2. Est-ce qu'elles montent bien vers le haut ?
+3. Est-ce qu'elles apparaissent avec un léger décalage entre elles ?
+
+---
+
 
 ## Exercice 8.3 — Loader spinner
 
@@ -1992,7 +2770,92 @@ Créer un spinner de chargement en CSS pur.
 
 > **Concepts à utiliser** : `border`, `border-top-color`, `border-radius: 50%`, `@keyframes`, `animation: spin 0.8s linear infinite`
 
+
 ---
+
+# 🛠️ Exercice 8.3 — Loader Spinner (Animation Infinie)
+
+L'objectif est de créer un indicateur de chargement ("spinner") qui tourne sur lui-même indéfiniment. C'est l'élément indispensable pour faire patienter l'utilisateur pendant qu'une requête API récupère les données de votre dashboard.
+
+### 1. Comprendre les outils
+* **Le cercle par les bordures** : Pour créer un spinner, on crée un carré parfait, on lui donne un `border-radius: 50%` pour le transformer en cercle, et on colore une seule de ses quatre bordures (`border-top-color`).
+* **`@keyframes spin`** : Cette animation ne change pas de position, elle change d'angle. On utilise `transform: rotate()`.
+* **`linear`** : Contrairement au `ease` que nous avons utilisé pour les cartes, un spinner doit tourner à une vitesse constante pour paraître fluide et mécanique.
+* **`infinite`** : On demande à l'animation de recommencer dès qu'elle se termine, sans jamais s'arrêter.
+
+
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc à l'endroit où vous souhaitez simuler un chargement (par exemple, dans une zone vide de votre dashboard) :
+
+```html
+<div class="loader-container">
+  <div class="spinner"></div>
+  <p>Synchronisation avec le serveur...</p>
+</div>
+```
+
+---
+
+### 3. Action : Créer et Animer le Spinner (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 40px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  
+  /* On crée un cercle avec une bordure grise très légère */
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  
+  /* On colore uniquement le haut pour créer l'effet de "crochet" */
+  border-top-color: var(--accent);
+  
+  /* Lancement de l'animation */
+  animation: spin 0.8s linear infinite;
+}
+
+.loader-container p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+/* --- LA ROTATION --- */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Regardez bien votre spinner. Si vous changez `border-top-color` en `border-left-color` aussi, votre spinner aura deux côtés colorés. Si vous changez `0.8s` par `2s`, il aura l'air beaucoup plus lent et 'fatigué'. La fluidité d'un spinner est souvent ce qui donne l'impression qu'une application est performante."
+
+**Vérification :**
+1. Le cercle tourne-t-il sans aucune saccade ?
+2. Le texte est-il bien centré sous le spinner ?
+3. Le spinner s'intègre-t-il bien dans le thème sombre de DevPulse ?
+
+---
+
 
 ## Exercice 8.4 — Skeleton loading
 
@@ -2016,7 +2879,105 @@ Créer un skeleton (placeholder grisé animé) qui s'affiche avant le chargement
 
 > **Concepts à utiliser** : `@keyframes`, `background: linear-gradient`, `background-size`, `background-position`, `animation`
 
+
 ---
+
+# 🛠️ Exercice 8.4 — Skeleton Loading (Shimmer effect)
+
+L'objectif est de créer un faux contenu qui "brille". Au lieu d'un spinner central, on montre à l'utilisateur la forme de ce qui va arriver (un avatar, un titre, des lignes de texte).
+
+### 1. Comprendre les outils
+* **Le dégradé dynamique** : On utilise un `linear-gradient` avec trois couleurs : `gris -> blanc translucide -> gris`. 
+* **`background-size: 200%`** : On rend le fond deux fois plus large que l'élément pour pouvoir faire glisser le reflet de gauche à droite.
+* **`animation`** : On fait bouger la `background-position` en boucle pour créer cet effet de balayage lumineux.
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc de squelette dans votre page. Il simule la structure d'un profil utilisateur ou d'une carte d'activité.
+
+```html
+<div class="skeleton-card">
+  <div class="skeleton skeleton-avatar"></div>
+  <div class="skeleton skeleton-title"></div>
+  <div class="skeleton skeleton-text"></div>
+  <div class="skeleton skeleton-text short"></div>
+</div>
+```
+
+---
+
+### 3. Action : Créer l'effet de brillance (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+.skeleton-card {
+  background-color: var(--surface);
+  padding: 20px;
+  border-radius: var(--radius);
+  width: 300px;
+  margin-top: 30px;
+}
+
+.skeleton {
+  /* Fond de base gris + dégradé de brillance */
+  background: linear-gradient(
+    90deg, 
+    rgba(255, 255, 255, 0.05) 25%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  
+  /* Lancement de l'animation de balayage */
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Tailles spécifiques */
+.skeleton-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.skeleton-title {
+  width: 70%;
+  height: 18px;
+  margin-top: 15px;
+}
+
+.skeleton-text {
+  width: 100%;
+  height: 12px;
+}
+
+.skeleton-text.short {
+  width: 40%;
+}
+
+/* --- L'ANIMATION DU REFLET --- */
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Observez le mouvement de la lumière. Elle semble traverser tous les éléments en même temps. C'est l'un des secrets pour rendre une interface fluide : donner l'impression que le contenu est déjà là, sous une couche de verre. Si vous changez `1.5s` par `0.8s`, la brillance passera beaucoup plus vite, ce qui peut donner une sensation d'urgence ou de stress."
+
+**Vérification :**
+1. L'avatar est-il bien un cercle ?
+2. Le reflet glisse-t-il bien de façon continue sur les éléments ?
+3. Le squelette s'arrête-t-il bien aux bords de la carte ?
+
 
 ---
 
@@ -2127,6 +3088,277 @@ Construire un vrai formulaire d'inscription avec tous les types d'inputs stylés
 > **Concepts à utiliser** : tout ce qu'on a vu + `appearance: none`, `::after`, pseudo-éléments
 
 ---
+
+<form class="register-form">
+  <h2>Créer un compte</h2>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Prénom <span class="required">*</span></label>
+      <input type="text" class="input" placeholder="Jean" required>
+    </div>
+    <div class="form-group">
+      <label>Nom <span class="required">*</span></label>
+      <input type="text" class="input" placeholder="Dupont" required>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Email <span class="required">*</span></label>
+    <input type="email" class="input" placeholder="jean@exemple.com" required>
+    <span class="hint">On ne partagera jamais votre email.</span>
+  </div>
+
+  <div class="form-group">
+    <label>Mot de passe <span class="required">*</span></label>
+    <input type="password" class="input" placeholder="Min. 8 caractères" required>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Rôle</label>
+      <select class="input select">
+        <option>Développeur</option>
+        <option>Designer</option>
+        <option>Product Manager</option>
+        <option>DevOps</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Expérience</label>
+      <select class="input select">
+        <option>Junior (0-2 ans)</option>
+        <option>Mid (2-5 ans)</option>
+        <option>Senior (5+ ans)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Bio</label>
+    <textarea class="input textarea" rows="3" placeholder="Parlez-nous de vous..."></textarea>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Stack technique</label>
+      <label class="checkbox">
+        <input type="checkbox" checked>
+        <span>React / Vue</span>
+      </label>
+      <label class="checkbox">
+        <input type="checkbox">
+        <span>Node.js</span>
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" checked>
+        <span>Python</span>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label>Type de contrat</label>
+      <label class="radio">
+        <input type="radio" name="contract">
+        <span>CDI</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="contract" checked>
+        <span>Freelance</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="contract">
+        <span>CDD</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="toggle-label">
+      <span class="toggle">
+        <input type="checkbox" checked>
+        <span class="toggle-slider"></span>
+      </span>
+      Recevoir les notifications par email
+    </label>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Créer mon compte</button>
+    <button type="reset" class="btn btn-outline">Annuler</button>
+  </div>
+</form>
+---
+
+# 🛠️ Exercice 9.1 — Formulaire d'inscription (Mastering Inputs)
+
+L'objectif est de transformer des éléments de formulaire bruts en une interface élégante. Le plus grand défi ici est de "tuer" le style par défaut des navigateurs pour imposer le nôtre, notamment pour les Checkbox, Radio et Select.
+
+### 1. Comprendre les outils
+* **`appearance: none`** : C'est la commande qui dit au navigateur : "Oublie ton style par défaut pour cette case ou ce menu, je m'en occupe".
+* **`::after` / `::before`** : On utilise ces pseudo-éléments pour dessiner manuellement la coche (V) du checkbox ou le point du bouton radio.
+* **Le Switch (Toggle)** : C'est une checkbox cachée. Le "slider" est un `<span>` que l'on déplace selon que la checkbox est `:checked` ou non.
+
+---
+
+### 2. Action : Mise en page globale (CSS)
+On commence par structurer les rangées et les groupes.
+
+```css
+.register-form {
+  background-color: var(--surface);
+  padding: 40px;
+  border-radius: var(--radius);
+  max-width: 700px;
+  margin: 20px auto;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.required { color: #ff7675; }
+.hint { font-size: 0.8rem; color: var(--text-muted); }
+```
+
+---
+
+### 3. Action : Customisation des Inputs (CSS)
+On applique le design système de **DevPulse**.
+
+```css
+/* Style commun : Input, Textarea, Select */
+.input {
+  background-color: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 12px;
+  border-radius: var(--radius);
+  outline: none;
+  transition: all 0.2s;
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+}
+
+.textarea { resize: vertical; min-height: 80px; }
+
+/* Custom Checkbox & Radio */
+.checkbox, .radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.checkbox input, .radio input {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--accent);
+  background-color: transparent;
+  position: relative;
+  cursor: pointer;
+}
+
+.checkbox input { border-radius: 4px; }
+.radio input { border-radius: 50%; }
+
+.checkbox input:checked::after {
+  content: "✓";
+  position: absolute;
+  top: -2px; left: 2px;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.radio input:checked::after {
+  content: "";
+  position: absolute;
+  width: 10px; height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  top: 2px; left: 2px;
+}
+```
+
+---
+
+### 4. Action : Le Switch Animé (Toggle)
+C'est la partie la plus "visuelle" de l'exercice.
+
+```css
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+}
+
+.toggle {
+  position: relative;
+  width: 40px;
+  height: 20px;
+}
+
+.toggle input { opacity: 0; width: 0; height: 0; }
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background-color: #444;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+.toggle-slider::before {
+  content: "";
+  position: absolute;
+  height: 14px; width: 14px;
+  left: 3px; bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.toggle input:checked + .toggle-slider { background-color: var(--success); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Regardez le **Toggle**. Ce n'est qu'une simple case à cocher cachée. Mais avec un peu de CSS, on la transforme en un composant interactif digne d'une application mobile. Notez aussi l'usage de `+` (sélecteur adjacent) : il permet de dire 'Si l'input est coché, alors change le style du span juste après lui'."
+
+**Vérification :**
+1. Votre formulaire est-il bien sur 2 colonnes sur PC et 1 seule sur mobile ?
+2. Vos cases à cocher et boutons radios ont-ils bien la couleur violette ?
+3. Le switch passe-t-il bien au vert quand vous l'activez ?
+
 
 ---
 
@@ -2266,7 +3498,96 @@ Une table de logs API avec scroll vertical et header qui reste collé.
 
 > **Concepts à utiliser** : `max-height`, `overflow-y: auto`, `position: sticky`, `::-webkit-scrollbar`
 
+
 ---
+
+# 🛠️ Exercice 10.2 — Header Sticky (Tableau de Logs)
+
+L'objectif est de créer une zone de logs API compacte. Le défi technique ici est le `position: sticky` : il permet à l'en-tête de "coller" au sommet du conteneur pendant que le contenu défile en dessous.
+
+### 1. Comprendre les outils
+* **`position: sticky`** : Un mélange entre `relative` et `fixed`. L'élément défile normalement jusqu'à ce qu'il atteigne une position donnée (ici `top: 0`), puis il s'y bloque.
+* **`z-index: 1`** : Nécessaire pour s'assurer que l'en-tête passe *au-dessus* des lignes de données lors du défilement.
+* **Le fond solide** : Par défaut, les cellules `<th>` peuvent avoir un fond transparent. Si vous ne mettez pas de `background-color` sur le header, vous verrez les lignes de données passer "à travers" le texte de l'en-tête.
+
+
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc. Pour bien tester l'effet, n'hésitez pas à copier-coller la ligne `<tr>` une vingtaine de fois.
+
+```html
+<div class="table-scroll-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Endpoint</th>
+        <th>Méthode</th>
+        <th>Status</th>
+        <th>Temps (ms)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>/api/users</td><td><span class="txt-bold">GET</span></td><td><span class="badge badge-success">200</span></td><td>45ms</td></tr>
+      <tr><td>2</td><td>/api/auth/login</td><td><span class="txt-bold">POST</span></td><td><span class="badge badge-success">200</span></td><td>95ms</td></tr>
+      <tr><td>3</td><td>/api/reports/v1</td><td><span class="txt-bold">GET</span></td><td><span class="badge badge-danger">500</span></td><td>1250ms</td></tr>
+      <tr><td>4</td><td>/api/users/42</td><td><span class="txt-bold">PUT</span></td><td><span class="badge badge-success">200</span></td><td>62ms</td></tr>
+      </tbody>
+  </table>
+</div>
+```
+
+---
+
+### 3. Action : Fixer le header (CSS)
+Ajoutez ces règles. Notez bien l'application du fond sur les `th`.
+
+```css
+.table-scroll-wrapper {
+  max-height: 350px;
+  overflow-y: auto;
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  margin-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* --- LA MAGIE DU STICKY --- */
+.table-scroll-wrapper thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  /* Fond solide obligatoire pour ne pas voir le texte défiler derrière */
+  background-color: #2d3436; 
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1); /* Ligne de séparation */
+}
+
+/* Personnalisation de la scrollbar pour le wrapper */
+.table-scroll-wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+
+.table-scroll-wrapper::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+/* Styles pour les logs */
+.txt-bold { font-weight: bold; font-family: monospace; }
+.data-table td { font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; }
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Faites défiler le tableau. Vous voyez comme l'en-tête gris reste figé en haut ? C'est le `position: sticky`. Notez que nous avons appliqué le `sticky` sur les balises `th` et non sur le `thead` directement. C'est une particularité des tableaux en CSS : pour une compatibilité maximale sur tous les navigateurs, il vaut mieux fixer les cellules d'en-tête individuellement."
+
+**Vérification :**
+1. L'en-tête reste-t-il bien visible même tout en bas de la liste ?
+2. Les données sont-elles bien lisibles lorsqu'elles passent sous l'en-tête ?
+3. La scrollbar est-elle bien fine et colorée ?
 
 ---
 
@@ -2308,7 +3629,124 @@ Créer un overlay sombre avec une modal centrée (sans JavaScript pour le style,
 
 > **Concepts à utiliser** : `position: fixed`, `inset: 0`, `background: rgba(0,0,0,0.6)`, `display: flex`
 
+
 ---
+
+# 🛠️ Exercice 11.1 — Modal (Popup & Overlay)
+
+L'objectif est de créer une boîte de dialogue qui demande une confirmation. Pour cela, nous utilisons le positionnement **fixed** qui permet de bloquer l'overlay sur tout l'écran, même si l'utilisateur fait défiler la page en arrière-plan.
+
+### 1. Comprendre les outils
+* **`position: fixed`** : Contrairement à `absolute`, cet élément est positionné par rapport à la fenêtre du navigateur (le viewport). Il reste en place même au scroll.
+* **`inset: 0`** : Un raccourci crucial qui force l'overlay à s'étirer sur les 4 bords de l'écran.
+* **`background: rgba(0, 0, 0, 0.6)`** : On utilise l'alpha (0.6) pour créer cet effet de "voile" sombre qui met en valeur la modal et indique que le reste de l'interface est temporairement inaccessible.
+* **Centrage Flexbox** : L'overlay devient un conteneur Flex pour aligner la `.modal-box` parfaitement au milieu de l'écran.
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc à la fin de votre fichier HTML (juste avant la fermeture de `</body>`).
+
+```html
+<div style="padding: 20px;">
+  <button class="btn btn-primary" onclick="document.getElementById('modal').style.display='flex'">
+    Ouvrir la modal
+  </button>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Confirmer la suppression</h3>
+      <button class="modal-close" onclick="document.getElementById('modal').style.display='none'">✕</button>
+    </div>
+    <div class="modal-body">
+      <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible et supprimera toutes les données associées.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="document.getElementById('modal').style.display='none'">Annuler</button>
+      <button class="btn btn-danger">Supprimer</button>
+    </div>
+  </div>
+</div>
+```
+
+---
+
+### 3. Action : Superposer et Centrer (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+/* 1. L'arrière-plan sombre */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px); /* Petit bonus : floute l'arrière-plan */
+  display: none; /* Caché par défaut */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Toujours au-dessus de tout */
+}
+
+/* 2. La boîte blanche/sombre centrale */
+.modal-box {
+  background-color: var(--surface);
+  width: 90%;
+  max-width: 500px;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  animation: modalIn 0.3s ease-out; /* Animation d'entrée */
+}
+
+/* 3. Sections internes */
+.modal-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 20px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.modal-footer {
+  padding: 20px;
+  display: flex;
+  justify-content: flex-end; /* Boutons à droite */
+  gap: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Petite animation d'apparition */
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Cliquez sur le bouton. Remarquez comment l'overlay bloque toute interaction avec le reste du dashboard. C'est l'essence même d'une modal : capturer l'attention. Notez aussi l'usage de `backdrop-filter: blur()`. C'est une propriété moderne qui donne cet aspect 'verre dépoli' très élégant à l'overlay."
+
+**Vérification :**
+1. La modal est-elle bien centrée horizontalement et verticalement ?
+2. Le fond est-il assez sombre pour que le texte de la modal ressorte ?
+3. Le bouton "Annuler" et la croix ferment-ils bien la fenêtre ?
+
 
 ## Exercice 11.2 — Dropdown menu
 
@@ -2340,6 +3778,113 @@ Un bouton qui révèle un menu déroulant au hover.
 
 ---
 
+# 🛠️ Exercice 11.2 — Dropdown Menu (Positionnement Absolu)
+
+L'objectif est de créer un menu qui "apparaît" sous un bouton. Pour un rendu professionnel, on évite le `display: none` qui empêche les animations. À la place, on joue sur l'**opacité** et la **translation** pour créer un effet de glissement fluide.
+
+### 1. Comprendre les outils
+* **`position: relative` (sur le parent)** : Il sert de point d'ancrage. Le menu saura qu'il doit se placer par rapport à ce bloc et non par rapport à la page entière.
+* **`position: absolute` (sur le menu)** : Permet de sortir le menu du flux pour qu'il "flotte" au-dessus du reste du contenu.
+* **`pointer-events: none`** : Indispensable quand on utilise `opacity: 0`. Cela indique au navigateur d'ignorer les clics sur le menu tant qu'il est invisible (pour éviter de cliquer sur un lien caché par erreur).
+* **Le sélecteur de survol** : `.dropdown:hover .dropdown-menu` permet de changer l'état du menu dès que la souris entre dans la zone du parent.
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc, idéalement dans votre `header` ou une barre d'outils.
+
+```html
+<div class="dropdown">
+  <button class="dropdown-trigger">Mon compte ▾</button>
+  <div class="dropdown-menu">
+    <a href="#" class="dropdown-item">👤 Profil</a>
+    <a href="#" class="dropdown-item">⚙️ Paramètres</a>
+    <a href="#" class="dropdown-item">📊 Statistiques</a>
+    <div class="dropdown-divider"></div>
+    <a href="#" class="dropdown-item danger">🚪 Déconnexion</a>
+  </div>
+</div>
+```
+
+---
+
+### 3. Action : Animer l'apparition (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+/* 1. Le conteneur parent */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* 2. Le menu caché */
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Se place juste en dessous du bouton */
+  right: 0;   /* Aligné sur le bord droit */
+  width: 200px;
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  margin-top: 10px;
+  padding: 8px 0;
+  z-index: 100;
+
+  /* --- ÉTAT INITIAL (Caché) --- */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+/* 3. ÉTAT AU SURVOL */
+.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* 4. Éléments du menu */
+.dropdown-item {
+  display: block;
+  padding: 10px 20px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--accent);
+}
+
+.dropdown-item.danger:hover {
+  color: #ff7675;
+  background-color: rgba(255, 118, 117, 0.1);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 8px 0;
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Passez votre souris sur 'Mon compte'. Vous voyez comment le menu semble descendre doucement ? C'est le mélange de `opacity` et `translateY`. Notez l'importance du `margin-top: 10px` sur le menu : il crée un petit espace visuel, mais comme le conteneur `.dropdown` englobe tout, le menu ne disparaît pas quand vous déplacez la souris vers lui."
+
+**Vérification :**
+1. Le menu apparaît-il bien de manière fluide ?
+2. Les liens changent-ils de couleur quand vous passez dessus ?
+3. Le menu est-il bien positionné par rapport au bouton ?
+
+
+
 ## Exercice 11.3 — Tooltip
 
 ### Objectif
@@ -2362,7 +3907,103 @@ Au hover sur un élément, afficher un tooltip au-dessus avec une petite flèche
 
 > **Concepts à utiliser** : `::before`, `::after`, `content: attr(...)`, `position: absolute`, `border` (triangle CSS)
 
+
 ---
+
+# 🛠️ Exercice 11.3 — Tooltip (Pseudo-éléments & Attributs)
+
+L'objectif est de créer un tooltip **sans ajouter de balises HTML supplémentaires**. Nous allons utiliser la puissance des pseudo-éléments et la fonction CSS `attr()` qui permet de récupérer du texte directement depuis le HTML.
+
+### 1. Comprendre les outils
+* **`content: attr(data-tooltip)`** : C'est l'astuce magique. Le CSS va lire ce qui est écrit dans l'attribut `data-tooltip` de votre bouton pour l'afficher dans le pseudo-élément `::before`.
+* **Le Triangle CSS (`::after`)** : On crée une flèche sans image en utilisant des bordures. Un élément de 0px de large avec des bordures transparentes sauf une produit un triangle parfait.
+* **Positionnement Centré** : Pour centrer le tooltip au-dessus du bouton, on utilise `left: 50%` combiné à `transform: translateX(-50%)`.
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ces boutons. Notez l'utilisation de l'attribut personnalisé `data-tooltip`.
+
+```html
+<div class="tooltip-demo">
+  <button class="btn btn-outline tooltip-trigger" data-tooltip="Copier dans le presse-papier">📋 Copier</button>
+  <button class="btn btn-outline tooltip-trigger" data-tooltip="Rafraîchir les données">🔄 Refresh</button>
+  <button class="btn btn-outline tooltip-trigger" data-tooltip="Télécharger en CSV">📥 Export</button>
+</div>
+```
+
+---
+
+### 3. Action : Designer l'infobulle (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+.tooltip-demo {
+  display: flex;
+  gap: 20px;
+  padding: 50px; /* Espace pour voir le tooltip au-dessus */
+}
+
+.tooltip-trigger {
+  position: relative; /* Point d'ancrage pour ::before et ::after */
+}
+
+/* --- LE CORPS DU TOOLTIP --- */
+.tooltip-trigger::before {
+  content: attr(data-tooltip); /* Récupère le texte du HTML */
+  position: absolute;
+  bottom: 125%; /* Se place au-dessus du bouton */
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  
+  background-color: #1e272e;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+/* --- LA PETITE FLÈCHE (TRIANGLE) --- */
+.tooltip-trigger::after {
+  content: "";
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  
+  /* Technique du triangle CSS */
+  border-width: 6px;
+  border-style: solid;
+  border-color: #1e272e transparent transparent transparent;
+  
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+/* --- AFFICHAGE AU HOVER --- */
+.tooltip-trigger:hover::before,
+.tooltip-trigger:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Survolez les boutons. Vous voyez comme le texte change alors que le code CSS est le même pour les trois ? C'est grâce au `attr(data-tooltip)`. Cette méthode est extrêmement performante car elle évite d'alourdir le DOM avec des dizaines de balises `<div>` cachées. Notez aussi le petit mouvement de 'montée' lors de l'apparition, rendu possible par le `translateY`."
+
+**Vérification :**
+1. Le texte affiché correspond-il bien à l'attribut du bouton ?
+2. Le tooltip est-il bien centré par rapport au bouton ?
+3. La petite flèche pointe-t-elle bien vers le bouton ?
+
 
 ## Exercice 11.4 — Tabs (onglets)
 
@@ -2400,7 +4041,125 @@ Créer des onglets de navigation avec contenu qui change (CSS only avec `:checke
 
 > **Concepts à utiliser** : `:checked`, sélecteur `~` (general sibling), `display: none/block`, `border-bottom`
 
+
 ---
+
+# 🛠️ Exercice 11.4 — Onglets (Tabs) en pur CSS
+
+L'objectif est de créer un système de navigation interne où le clic sur un label active un panneau de contenu spécifique. Le secret réside dans le sélecteur adjacent (`~`) qui permet de modifier un élément situé plus loin dans le code en fonction de l'état d'une case cochée.
+
+### 1. Comprendre les outils
+* **`:checked`** : Ce pseudo-sélecteur détecte quel bouton radio est actuellement sélectionné par l'utilisateur.
+* **Sélecteur `~` (Frère général)** : Il permet de cibler un élément qui partage le même parent, même s'il n'est pas placé juste après.
+* **Liaison `label for=""`** : Comme les boutons radio sont cachés (`display: none`), on utilise les labels pour "cliquer" à leur place. Cliquer sur le label active la radio correspondante.
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc. Notez bien que les `input` doivent être **avant** les panels pour que le sélecteur CSS puisse les atteindre.
+
+```html
+<div class="tabs">
+  <input type="radio" name="tab" id="tab1" checked class="tab-input">
+  <input type="radio" name="tab" id="tab2" class="tab-input">
+  <input type="radio" name="tab" id="tab3" class="tab-input">
+
+  <div class="tab-labels">
+    <label for="tab1" class="tab-label">Général</label>
+    <label for="tab2" class="tab-label">Sécurité</label>
+    <label for="tab3" class="tab-label">Notifications</label>
+  </div>
+
+  <div class="tab-panels">
+    <div class="tab-panel" id="panel1">
+      <h4>Paramètres Généraux</h4>
+      <p>Configurez ici les informations de base de votre profil.</p>
+    </div>
+    <div class="tab-panel" id="panel2">
+      <h4>Sécurité</h4>
+      <p>Gérez votre mot de passe et l'authentification à deux facteurs.</p>
+    </div>
+    <div class="tab-panel" id="panel3">
+      <h4>Notifications</h4>
+      <p>Choisissez comment vous souhaitez être alerté des activités.</p>
+    </div>
+  </div>
+</div>
+```
+
+---
+
+### 3. Action : Logique d'affichage (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+.tabs {
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-top: 30px;
+}
+
+/* 1. On cache les vrais boutons radio */
+.tab-input {
+  display: none;
+}
+
+/* 2. Style des onglets */
+.tab-labels {
+  display: flex;
+  gap: 20px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 20px;
+}
+
+.tab-label {
+  padding: 10px 0;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px; /* Pour chevaucher la bordure du parent */
+  transition: all 0.3s;
+}
+
+/* 3. Style de l'onglet actif (quand la radio est cochée) */
+#tab1:checked ~ .tab-labels label[for="tab1"],
+#tab2:checked ~ .tab-labels label[for="tab2"],
+#tab3:checked ~ .tab-labels label[for="tab3"] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* 4. Gestion des panneaux */
+.tab-panel {
+  display: none; /* Tout est caché par défaut */
+  animation: fadeIn 0.4s ease;
+}
+
+/* Affichage du panel correspondant au radio coché */
+#tab1:checked ~ .tab-panels #panel1,
+#tab2:checked ~ .tab-panels #panel2,
+#tab3:checked ~ .tab-panels #panel3 {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "C'est l'un des usages les plus intelligents du CSS. En utilisant les ID et les labels, on crée une véritable logique applicative sans une seule ligne de JS. Regardez comment le panneau semble 'apparaître' grâce à la petite animation `fadeIn` que nous avons ajoutée."
+
+**Vérification :**
+1. Est-ce que le texte change bien quand vous cliquez sur un autre onglet ?
+2. L'onglet actif a-t-il bien sa bordure violette ?
+3. Le contenu des autres onglets est-il bien invisible ?
+
 
 ## Exercice 11.5 — Accordéon
 
@@ -2439,7 +4198,129 @@ Un accordéon FAQ qui s'ouvre/ferme sans JavaScript.
 
 > **Concepts à utiliser** : `<details>/<summary>`, `list-style: none`, `::after`, `transform: rotate()`, `details[open]`
 
+
 ---
+
+# 🛠️ Exercice 11.5 — Accordéon FAQ (Balises Natives)
+
+L'objectif est de styliser ces balises pour qu'elles s'intègrent au design **DevPulse**. Nous allons remplacer la petite flèche standard du navigateur par une icône personnalisée et animée.
+
+### 1. Comprendre les outils
+* **`<details>`** : Le conteneur qui gère l'état (ouvert ou fermé).
+* **`<summary>`** : La partie toujours visible. Cliquer dessus bascule l'état du parent.
+* **`details[open]`** : Un sélecteur d'attribut CSS qui permet d'appliquer des styles spécifiques uniquement quand l'accordéon est ouvert.
+* **`list-style: none`** : Utilisé sur le `summary` pour cacher le triangle gris par défaut (Chrome/Safari). Sur Firefox, on utilise souvent le sélecteur non-standard `::-webkit-details-marker`.
+
+---
+
+### 2. Action : Structure HTML
+Voici la structure à intégrer. Elle est très légère car le comportement est déjà inclus dans le HTML.
+
+```html
+<div class="accordion">
+  <details class="accordion-item">
+    <summary class="accordion-header">Comment déployer mon application ?</summary>
+    <div class="accordion-body">
+      <p>Connectez votre repo GitHub, configurez votre pipeline CI/CD, et lancez le déploiement depuis le dashboard.</p>
+    </div>
+  </details>
+
+  <details class="accordion-item" open> <summary class="accordion-header">Quels langages sont supportés ?</summary>
+    <div class="accordion-body">
+      <p>Nous supportons Node.js, Python, Go, Rust, Java, et PHP. Docker est aussi supporté pour les stacks custom.</p>
+    </div>
+  </details>
+
+  <details class="accordion-item">
+    <summary class="accordion-header">Comment contacter le support ?</summary>
+    <div class="accordion-body">
+      <p>Via le chat en direct, par email à support@devpulse.ma, ou via le canal Slack dédié.</p>
+    </div>
+  </details>
+</div>
+```
+
+---
+
+### 3. Action : Styliser et Animer (CSS)
+Ajoutez ces règles dans votre fichier `style.css` :
+
+```css
+.accordion {
+  max-width: 600px;
+  margin-top: 30px;
+}
+
+.accordion-item {
+  background-color: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  overflow: hidden; /* Pour que le body ne dépasse pas des coins arrondis */
+  transition: border-color 0.3s;
+}
+
+.accordion-item[open] {
+  border-color: var(--accent);
+}
+
+/* 1. L'en-tête cliquable */
+.accordion-header {
+  padding: 18px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none; /* Cache la flèche par défaut */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+/* Pour Safari (webkit) */
+.accordion-header::-webkit-details-marker {
+  display: none;
+}
+
+/* 2. Création de notre flèche personnalisée */
+.accordion-header::after {
+  content: "→";
+  color: var(--accent);
+  transition: transform 0.3s ease;
+  font-size: 1.2rem;
+}
+
+/* Rotation de la flèche quand ouvert */
+.accordion-item[open] .accordion-header::after {
+  transform: rotate(90deg);
+}
+
+/* 3. Le contenu */
+.accordion-body {
+  padding: 0 20px 20px 20px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  /* Animation simple d'entrée */
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Remarquez que nous n'avons pas besoin de JS pour l'ouverture. Le navigateur gère tout. Notez aussi l'usage de `details[open]`. C'est extrêmement puissant pour changer l'apparence de l'en-tête (comme mettre le texte en gras ou changer la couleur de la bordure) uniquement lorsque le contenu est révélé."
+
+**Vérification :**
+1. Les flèches tournent-elles bien de 90 degrés à l'ouverture ?
+2. Le contenu s'affiche-t-il avec une légère transition ?
+3. Le triangle gris par défaut du navigateur a-t-il bien disparu ?
+
+
 
 ---
 
@@ -2476,7 +4357,99 @@ Ajouter un toggle dark/light mode à votre dashboard en utilisant uniquement les
 
 > **Concepts à utiliser** : variables CSS, `.classList.toggle()`, tout le design s'adapte automatiquement si vous avez bien utilisé `var(--xxx)` partout
 
+
 ---
+
+# 🛠️ Exercice 12.1 — Theming (Variables CSS & Switch)
+
+L'objectif est d'implémenter un mode clair. Au lieu de réécrire le CSS pour chaque composant (boutons, cartes, tableaux), nous allons simplement **redéfinir la valeur des variables** à la racine du document.
+
+### 1. Comprendre les outils
+* **`:root`** : C'est le sélecteur de plus haut niveau (l'élément `<html>`). Les variables définies ici sont disponibles partout.
+* **`:root.light`** : Lorsque nous ajoutons la classe `.light` à la balise `<html>`, le navigateur écrase les anciennes valeurs des variables par les nouvelles.
+* **Héritage automatique** : Tous vos composants (cards, inputs, tables) qui utilisent `var(--surface)` se mettront à jour instantanément sans effort supplémentaire.
+
+---
+
+### 2. Action : Définir les palettes (CSS)
+Mettez à jour le haut de votre fichier `style.css` pour inclure les deux thèmes.
+
+```css
+/* --- THÈME DARK (Par défaut) --- */
+:root {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --surface-2: #334155;
+  --border: rgba(255, 255, 255, 0.05);
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  
+  /* Couleurs d'accent (ne changent pas) */
+  --accent: #6c5ce7;
+  --success: #00b894;
+  --danger: #ff7675;
+  --radius: 12px;
+}
+
+/* --- THÈME LIGHT (Activé par la classe .light) --- */
+:root.light {
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --surface-2: #e2e8f0;
+  --border: #cbd5e1;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  
+  /* On peut ajuster l'accent pour le mode clair si besoin */
+  --accent: #5849c4; 
+}
+```
+
+---
+
+### 3. Action : Ajouter le bouton de contrôle (HTML)
+Placez ce bouton dans votre barre de navigation (ou en haut de la page).
+
+```html
+<div class="theme-switcher">
+  <button class="btn btn-outline" onclick="document.documentElement.classList.toggle('light')">
+    🌗 Changer de thème
+  </button>
+</div>
+```
+
+---
+
+### 4. Action : Assurer la fluidité (CSS)
+Pour éviter un changement trop brutal pour les yeux, ajoutez cette règle globale :
+
+```css
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  /* Transition douce sur les couleurs de fond et de texte */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+}
+
+/* On applique aussi la transition sur les conteneurs principaux */
+.stat-card, .table-container, .register-form, .modal-box {
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Cliquez sur le bouton. Magique, non ? C'est le principe du **Single Source of Truth** (Source de vérité unique). En mode clair, l'ombre de vos cartes (box-shadow) pourrait paraître trop sombre ; c'est le moment d'ajuster une variable `--shadow` pour parfaire le rendu. Cette méthode est exactement celle utilisée par les frameworks modernes comme Tailwind ou Bootstrap."
+
+**Vérification :**
+1. Toutes les zones de texte sont-elles lisibles en mode clair ?
+2. Le fond de la page passe-t-il bien d'un bleu nuit à un gris très clair ?
+3. Les bordures de vos tableaux et inputs sont-elles toujours visibles ?
+
+
 
 ## Exercice 12.2 — Classes utilitaires
 
@@ -2514,6 +4487,89 @@ Créer un petit set de classes utilitaires (inspiration Tailwind) pour les cas r
 
 ---
 
+
+---
+
+# 🛠️ Exercice 12.2 — Les Classes Utilitaires (Système "Atomique")
+
+L'objectif est d'écrire ces règles une seule fois dans ton fichier CSS pour ne plus jamais avoir à ouvrir ton `style.css` juste pour ajouter une marge ou centrer un texte.
+
+### 1. Comprendre l'intérêt
+* **DRY (Don't Repeat Yourself)** : Tu évites de réécrire `display: flex; align-items: center;` 50 fois dans ton code.
+* **Rapidité** : Tu ajustes ton design directement dans le HTML.
+* **Maintenance** : Si tu décides que `mt-2` doit être un peu plus grand, tu le changes à un seul endroit.
+
+---
+
+### 2. Action : Implémenter la boîte à outils (CSS)
+Ajoute ce bloc à la toute fin de ton fichier `style.css`. Ce sont des classes "prioritaires".
+
+```css
+/* --- ESPACEMENT (Margins & Paddings) --- */
+.mt-1 { margin-top: 0.5rem !important; }
+.mt-2 { margin-top: 1rem !important; }
+.mb-1 { margin-bottom: 0.5rem !important; }
+.mb-2 { margin-bottom: 1rem !important; }
+.p-1 { padding: 0.5rem !important; }
+.p-2 { padding: 1rem !important; }
+
+/* --- FLEXBOX (Raccourcis de mise en page) --- */
+.flex { display: flex !important; }
+.flex-center { 
+  display: flex !important; 
+  align-items: center !important; 
+  justify-content: center !important; 
+}
+.flex-between { 
+  display: flex !important; 
+  align-items: center !important; 
+  justify-content: space-between !important; 
+}
+.gap-1 { gap: 0.5rem !important; }
+.gap-2 { gap: 1rem !important; }
+
+/* --- TYPOGRAPHIE --- */
+.text-muted { color: var(--text-muted) !important; }
+.text-sm { font-size: 0.85rem !important; }
+.text-center { text-align: center !important; }
+.font-bold { font-weight: 700 !important; }
+
+/* --- ACCESSIBILITÉ & VISIBILITÉ --- */
+.hidden { display: none !important; }
+
+/* SR-ONLY : Cache l'élément visuellement mais le laisse lisible par les lecteurs d'écran */
+.sr-only { 
+  position: absolute !absolute; 
+  width: 1px !important; 
+  height: 1px !important; 
+  padding: 0 !important; 
+  margin: -1px !important; 
+  overflow: hidden !important; 
+  clip: rect(0,0,0,0) !important; 
+  border: 0 !important; 
+}
+```
+
+---
+
+### 3. Comment utiliser cette implémentation ?
+Désormais, dans ton HTML, tu peux "composer" tes éléments comme ceci :
+
+```html
+<div class="flex-center mt-2 p-1 text-muted text-sm">
+  <p>Dernière mise à jour : il y a 5 minutes</p>
+</div>
+```
+
+### 👁️ Observation pour l'étudiant
+> "Remarque l'utilisation du `!important`. Habituellement, on l'évite, mais pour les classes utilitaires, c'est une bonne pratique. Pourquoi ? Parce qu'une classe nommée `.hidden` **doit** cacher l'élément, peu importe les autres règles CSS qui pourraient s'appliquer dessus."
+
+**Vérification :**
+1. Est-ce que tes classes sont bien regroupées par catégorie ?
+2. As-tu bien utilisé `rem` plutôt que `px` pour rester flexible ?
+3. La classe `.sr-only` est-elle bien présente ? (C'est la base de l'accessibilité moderne).
+
+
 ## Exercice 12.3 — Petits trucs qui font la différence
 
 ### Objectif
@@ -2544,33 +4600,88 @@ a { transition: color 0.2s ease; }
 
 ---
 
----
-
-# 🏁 Projet final — Assembler le tout
-
-### Objectif
-Assemblez tous les exercices dans un dashboard complet et fonctionnel :
-
-1. **Header sticky** avec navbar, logo, liens, bouton login, toggle theme
-2. **Layout** sidebar + contenu principal (Grid)
-3. **Sidebar** avec menu icônes + texte, responsive (icônes seules sur mobile)
-4. **Stat cards** en grille responsive avec animations d'entrée
-5. **Table d'utilisateurs** avec scroll horizontal, badges, avatars
-6. **Panel d'activité** scrollable avec scrollbar custom
-7. **Formulaire** de création d'utilisateur dans une modal
-8. **Dropdown** dans le header pour le menu utilisateur
-9. **Tabs** dans le contenu principal (Dashboard / Users / Settings)
-10. **Bouton flottant** de support en bas à droite
-11. **Dark/Light mode** toggle
-
-### Critères d'évaluation
-- ✅ Aucun framework CSS utilisé (tout en CSS pur)
-- ✅ Responsive (fonctionne sur mobile, tablette, desktop)
-- ✅ Variables CSS utilisées partout (pas de couleurs en dur)
-- ✅ Transitions/animations fluides
-- ✅ Accessibilité (focus visible, contrastes, curseurs)
-- ✅ Code propre et organisé (sections commentées)
+C’est la phase de "polissage" final. Ces détails ne changent pas la structure de ton application **DevPulse**, mais ils transforment radicalement le ressenti de l'utilisateur (le fameux *UX*). Un site qui réagit bien au clic et qui gère proprement le focus est ce qui différencie un projet amateur d'un produit professionnel.
 
 ---
 
-> **Rappel** : ce TP n'est pas un exercice de JavaScript. Le JS est utilisé uniquement pour les toggles (modal, theme). Tout le styling est en CSS pur.
+# 🛠️ Exercice 12.3 — Micro-Interactions & Finitions Pro
+
+L'objectif est d'harmoniser le comportement global de ton interface. Ces règles s'appliquent généralement de manière globale (sur des balises comme `html`, `a`, ou des classes génériques).
+
+### 1. Comprendre les outils
+* **`user-select: none`** : Évite que le texte ne se surligne en bleu quand l'utilisateur clique frénétiquement sur un bouton ou un onglet.
+* **`aspect-ratio`** : Une propriété moderne qui force un élément à garder ses proportions (ex: 16/9) sans avoir à calculer sa hauteur manuellement.
+* **`focus-visible`** : C'est le "Graal" de l'accessibilité. Il affiche une bordure de focus uniquement quand on navigue au **clavier** (touche Tab), mais la cache pour les utilisateurs de souris.
+
+---
+
+### 2. Action : Implémenter les finitions (CSS)
+
+Ajoute ces règles éparpillées selon leur importance (le `scroll-behavior` en haut, le reste avec tes composants) :
+
+```css
+/* --- 1. COMPORTEMENT GLOBAL --- */
+html {
+  scroll-behavior: smooth; /* Pour les ancres internes */
+}
+
+/* --- 2. ACCESSIBILITÉ MODERNE (Focus) --- */
+/* On remplace l'outline moche par défaut par un style cohérent */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* On retire l'outline pour les clics souris (car inutile visuellement) */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* --- 3. CONFORT DE NAVIGATION --- */
+a {
+  transition: color 0.2s ease;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.btn, .tab-label, .accordion-header, .dropdown-trigger {
+  user-select: none; /* Évite la sélection de texte accidentelle */
+  cursor: pointer;   /* Force la main sur tout ce qui se clique */
+}
+
+/* --- 4. GESTION DES MÉDIAS --- */
+/* Utile pour tes futures cards d'articles ou de projets */
+.card-image {
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Format cinéma */
+  object-fit: cover;    /* L'image remplit l'espace sans se déformer */
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+```
+
+---
+
+### 3. Action : Mise en pratique (HTML)
+
+Tu peux tester l'aspect-ratio avec une image fictive dans une carte :
+
+```html
+<div class="stat-card p-0" style="overflow:hidden">
+  <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6" class="card-image" alt="Code">
+  <div class="p-2">
+    <h4 class="mb-1">Aperçu du projet</h4>
+    <p class="text-muted text-sm">Développement de l'API v2 en cours.</p>
+  </div>
+</div>
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Essaye de naviguer sur ton dashboard en utilisant uniquement la touche **Tab** de ton clavier. Tu verras l'anneau de focus (outline) se déplacer proprement d'un élément à l'autre. C'est ce qui rend ton dashboard utilisable par tout le monde. Sans le `focus-visible`, un utilisateur au clavier est totalement perdu."
+
+**Vérification :**
+1. Quand tu cliques plusieurs fois sur un onglet, est-ce que le texte reste propre (pas de bleu) ?
+2. L'image de test garde-t-elle bien ses proportions sans être écrasée ?
+3. Le changement de couleur sur les liens est-il fluide ?
+

@@ -166,8 +166,383 @@
 </li>
 
 
+<div class="notification-list">
+  <div class="notif-item">
+    <span class="notif-icon">🔔</span>
+    <span class="notif-text">Déploiement v2.4.1 réussi sur le serveur de production EU-West après la migration</span>
+    <span class="notif-time">2min</span>
+  </div>
+  
+  <div class="notif-item">
+    <span class="notif-icon">⚠️</span>
+    <span class="notif-text">Alerte CPU : le worker-03 a dépassé 80% d'utilisation pendant plus de 5 minutes consécutives</span>
+    <span class="notif-time">15min</span>
+  </div>
+  
+  <div class="notif-item">
+    <span class="notif-icon">❌</span>
+    <span class="notif-text">Build failed sur la branche feature/auth-oauth2 — 3 tests en erreur</span>
+    <span class="notif-time">1h</span>
+  </div>
+</div>
+
+
+
 <div class="banner">
   <img src="https://picsum.photos/1200/400" alt="Banner" class="banner-img">
 </div>
+
+<div class="card-desc">
+  <h3>Description du projet</h3>
+  <p class="clamp-text">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor 
+    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
+    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
+    dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+    mollit anim id est laborum.
+  </p>
+</div>
+
+
+<div class="activity-panel">
+  <h3>Activité récente</h3>
+  <div class="activity-scroll">
+    <div class="activity-item"><span>🔔 Déploiement v2.4.1 réussi</span><span class="badge badge-success">OK</span></div>
+    <div class="activity-item"><span>⚠️ CPU > 80% sur worker-03</span><span class="badge badge-warning">Warn</span></div>
+    <div class="activity-item"><span>🔔 PR #847 mergé par Alice</span><span class="badge badge-success">OK</span></div>
+    <div class="activity-item"><span>❌ Build failed sur staging</span><span class="badge badge-danger">Fail</span></div>
+    <div class="activity-item"><span>🔔 Migration DB terminée</span><span class="badge badge-success">OK</span></div>
+    <div class="activity-item"><span>⚠️ SSL expire dans 7 jours</span><span class="badge badge-warning">Warn</span></div>
+    <div class="activity-item"><span>🔔 Backup quotidien OK</span><span class="badge badge-success">OK</span></div>
+    <div class="activity-item"><span>❌ Timeout /api/reports</span><span class="badge badge-danger">Fail</span></div>
+    <div class="activity-item"><span>🔔 Scale up: 3→5 replicas</span><span class="badge badge-success">OK</span></div>
+    <div class="activity-item"><span>⚠️ Rate limit client-42</span><span class="badge badge-warning">Warn</span></div>
+  </div>
+</div>
+
+
+
+<div class="hero-card">
+  <h2>Bienvenue sur DevPulse</h2>
+  <p>Monitorez vos services et vos déploiements en temps réel avec une précision chirurgicale.</p>
+  <button class="btn-hero">Commencer l'analyse</button>
+</div>
+
+<div class="image-overlay-container">
+  <img src="https://picsum.photos/800/300" alt="Cover" class="cover-img">
+  <div class="overlay">
+    <h2>Dashboard Analytics</h2>
+    <p>Vue d'ensemble de vos métriques et performances</p>
+  </div>
+</div>
+
+
+<div class="btn-showcase">
+  <button class="btn btn-primary">Primary</button>
+  <button class="btn btn-outline">Outline</button>
+  <button class="btn btn-danger">Supprimer</button>
+  <button class="btn btn-primary" disabled>Désactivé</button>
+</div>
+
+
+<div class="form-demo">
+  <div class="form-group">
+    <label>Email professionnel</label>
+    <input type="email" placeholder="nom@entreprise.com" class="input">
+  </div>
+
+  <div class="form-group">
+    <label>Email (erreur)</label>
+    <input type="email" value="abakar.dev" class="input input-error">
+    <span class="error-msg">Format d'adresse invalide</span>
+  </div>
+
+  <div class="form-group">
+    <label>Email (succès)</label>
+    <input type="email" value="contact@devpulse.ma" class="input input-success">
+    <span class="success-msg">Email vérifié ✓</span>
+  </div>
+</div>
+
+<div class="loader-container">
+  <div class="spinner"></div>
+  <p>Synchronisation avec le serveur...</p>
+</div>
+
+<div class="skeleton-card">
+  <div class="skeleton skeleton-avatar"></div>
+  <div class="skeleton skeleton-title"></div>
+  <div class="skeleton skeleton-text"></div>
+  <div class="skeleton skeleton-text short"></div>
+</div>
+
+
+<form class="register-form">
+  <h2>Créer un compte</h2>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Prénom <span class="required">*</span></label>
+      <input type="text" class="input" placeholder="Jean" required>
+    </div>
+    <div class="form-group">
+      <label>Nom <span class="required">*</span></label>
+      <input type="text" class="input" placeholder="Dupont" required>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Email <span class="required">*</span></label>
+    <input type="email" class="input" placeholder="jean@exemple.com" required>
+    <span class="hint">On ne partagera jamais votre email.</span>
+  </div>
+
+  <div class="form-group">
+    <label>Mot de passe <span class="required">*</span></label>
+    <input type="password" class="input" placeholder="Min. 8 caractères" required>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Rôle</label>
+      <select class="input select">
+        <option>Développeur</option>
+        <option>Designer</option>
+        <option>Product Manager</option>
+        <option>DevOps</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Expérience</label>
+      <select class="input select">
+        <option>Junior (0-2 ans)</option>
+        <option>Mid (2-5 ans)</option>
+        <option>Senior (5+ ans)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Bio</label>
+    <textarea class="input textarea" rows="3" placeholder="Parlez-nous de vous..."></textarea>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Stack technique</label>
+      <label class="checkbox">
+        <input type="checkbox" checked>
+        <span>React / Vue</span>
+      </label>
+      <label class="checkbox">
+        <input type="checkbox">
+        <span>Node.js</span>
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" checked>
+        <span>Python</span>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label>Type de contrat</label>
+      <label class="radio">
+        <input type="radio" name="contract">
+        <span>CDI</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="contract" checked>
+        <span>Freelance</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="contract">
+        <span>CDD</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="toggle-label">
+      <span class="toggle">
+        <input type="checkbox" checked>
+        <span class="toggle-slider"></span>
+      </span>
+      Recevoir les notifications par email
+    </label>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Créer mon compte</button>
+    <button type="reset" class="btn btn-outline">Annuler</button>
+  </div>
+</form>
+
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Utilisateur</th>
+        <th>Rôle</th>
+        <th>Status</th>
+        <th>Dernière activité</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="user-cell">
+            <div class="table-avatar">AM</div>
+            <div class="user-info">
+              <strong>Alice Martin</strong>
+              <span>alice@dev.io</span>
+            </div>
+          </div>
+        </td>
+        <td>Admin</td>
+        <td><span class="badge badge-success">Actif</span></td>
+        <td>Il y a 2 min</td>
+        <td><button class="btn-sm">Éditer</button></td>
+      </tr>
+      </tbody>
+  </table>
+</div>
+
+
+
+
+<div class="table-scroll-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Endpoint</th>
+        <th>Méthode</th>
+        <th>Status</th>
+        <th>Temps (ms)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>/api/users</td><td><span class="txt-bold">GET</span></td><td><span class="badge badge-success">200</span></td><td>45ms</td></tr>
+      <tr><td>2</td><td>/api/auth/login</td><td><span class="txt-bold">POST</span></td><td><span class="badge badge-success">200</span></td><td>95ms</td></tr>
+      <tr><td>3</td><td>/api/reports/v1</td><td><span class="txt-bold">GET</span></td><td><span class="badge badge-danger">500</span></td><td>1250ms</td></tr>
+      <tr><td>4</td><td>/api/users/42</td><td><span class="txt-bold">PUT</span></td><td><span class="badge badge-success">200</span></td><td>62ms</td></tr>
+      </tbody>
+  </table>
+</div>
+
+<div style="padding: 20px;">
+  <button class="btn btn-primary" onclick="document.getElementById('modal').style.display='flex'">
+    Ouvrir la modal
+  </button>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Confirmer la suppression</h3>
+      <button class="modal-close" onclick="document.getElementById('modal').style.display='none'">✕</button>
+    </div>
+    <div class="modal-body">
+      <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible et supprimera toutes les données associées.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="document.getElementById('modal').style.display='none'">Annuler</button>
+      <button class="btn btn-danger">Supprimer</button>
+    </div>
+  </div>
+</div>
+
+<div class="dropdown">
+  <button class="dropdown-trigger">Mon compte ▾</button>
+  <div class="dropdown-menu">
+    <a href="#" class="dropdown-item">👤 Profil</a>
+    <a href="#" class="dropdown-item">⚙️ Paramètres</a>
+    <a href="#" class="dropdown-item">📊 Statistiques</a>
+    <div class="dropdown-divider"></div>
+    <a href="#" class="dropdown-item danger">🚪 Déconnexion</a>
+  </div>
+</div>
+
+
+<div class="tooltip-demo">
+  <button class="btn btn-outline tooltip-trigger" data-tooltip="Copier dans le presse-papier">📋 Copier</button>
+  <button class="btn btn-outline tooltip-trigger" data-tooltip="Rafraîchir les données">🔄 Refresh</button>
+  <button class="btn btn-outline tooltip-trigger" data-tooltip="Télécharger en CSV">📥 Export</button>
+</div>
+
+
+<div class="tabs">
+  <input type="radio" name="tab" id="tab1" checked class="tab-input">
+  <input type="radio" name="tab" id="tab2" class="tab-input">
+  <input type="radio" name="tab" id="tab3" class="tab-input">
+
+  <div class="tab-labels">
+    <label for="tab1" class="tab-label">Général</label>
+    <label for="tab2" class="tab-label">Sécurité</label>
+    <label for="tab3" class="tab-label">Notifications</label>
+  </div>
+
+  <div class="tab-panels">
+    <div class="tab-panel" id="panel1">
+      <h4>Paramètres Généraux</h4>
+      <p>Configurez ici les informations de base de votre profil.</p>
+    </div>
+    <div class="tab-panel" id="panel2">
+      <h4>Sécurité</h4>
+      <p>Gérez votre mot de passe et l'authentification à deux facteurs.</p>
+    </div>
+    <div class="tab-panel" id="panel3">
+      <h4>Notifications</h4>
+      <p>Choisissez comment vous souhaitez être alerté des activités.</p>
+    </div>
+  </div>
+</div>
+
+<div class="accordion">
+  <details class="accordion-item">
+    <summary class="accordion-header">Comment déployer mon application ?</summary>
+    <div class="accordion-body">
+      <p>Connectez votre repo GitHub, configurez votre pipeline CI/CD, et lancez le déploiement depuis le dashboard.</p>
+    </div>
+  </details>
+
+  <details class="accordion-item" open> <summary class="accordion-header">Quels langages sont supportés ?</summary>
+    <div class="accordion-body">
+      <p>Nous supportons Node.js, Python, Go, Rust, Java, et PHP. Docker est aussi supporté pour les stacks custom.</p>
+    </div>
+  </details>
+
+  <details class="accordion-item">
+    <summary class="accordion-header">Comment contacter le support ?</summary>
+    <div class="accordion-body">
+      <p>Via le chat en direct, par email à support@devpulse.ma, ou via le canal Slack dédié.</p>
+    </div>
+  </details>
+</div>
+
+<div class="theme-switcher">
+  <button class="btn btn-outline" onclick="document.documentElement.classList.toggle('light')">
+    🌗 Changer de thème
+  </button>
+</div>
+
+<div class="flex-center mt-2 p-1 text-muted text-sm">
+  <p>Dernière mise à jour : il y a 5 minutes</p>
+</div>
+
+
+
+<div class="stat-card p-0" style="overflow:hidden">
+  <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6" class="card-image" alt="Code">
+  <div class="p-2">
+    <h4 class="mb-1">Aperçu du projet</h4>
+    <p class="text-muted text-sm">Développement de l'API v2 en cours.</p>
+  </div>
+</div>
+
+
+
 </body>
 </html>
