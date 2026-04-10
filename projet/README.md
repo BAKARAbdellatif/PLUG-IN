@@ -104,10 +104,6 @@ Afficher une boîte de login centrée au milieu de l'écran.
 > **Concepts à utiliser** : `display: flex`, `justify-content`, `align-items`, `min-height`
 
 
-Je comprends mieux, tu veux un format **guide de TP** que tes étudiants peuvent suivre en autonomie, avec une explication théorique d'abord, puis une consigne d'action immédiate.
-
-Voici le module pour l'**Exercice 1.1** rédigé comme un tutoriel "pas à pas" pour eux :
-
 ---
 
 # 🛠️ Exercice 1.1 — Centrer la boîte de Login
