@@ -1022,6 +1022,118 @@ Créer une barre d'info utilisateur : avatar + nom à gauche, statut + bouton se
 
 ---
 
+# 🛠️ Exercice 2.3 — Barre utilisateur (Flexbox imbriqué)
+
+L'objectif est d'aligner parfaitement des éléments qui ont des tailles différentes (une image, du texte sur deux lignes et des icônes). Nous allons apprendre à utiliser Flexbox pour le conteneur principal, mais aussi pour les petits groupes à l'intérieur.
+
+### 1. Comprendre les outils
+* **L'imbrication Flex** : On peut mettre une Flexbox dans une autre Flexbox. Le parent gère les deux grands blocs (gauche/droite), et les blocs enfants gèrent l'alignement de ce qu'ils contiennent (image/texte).
+* **Alignement vertical** : Avec `align-items: center`, on s'assure que le petit point vert est bien en face du texte "En ligne" et que l'avatar est bien aligné avec le nom.
+* **Le texte en bloc** : Par défaut, les balises `<span>` se mettent côte à côte. On va forcer le rôle de l'administratrice à passer sous son nom.
+
+
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc dans votre fichier `index.html`. Notez comment les éléments sont groupés en deux familles : `.user-info` et `.user-status`.
+
+```html
+<div class="user-bar">
+  <div class="user-info">
+    <img src="https://i.pravatar.cc/36?img=8" alt="User" class="user-avatar">
+    <div class="user-details">
+      <strong>Sarah Connor</strong>
+      <span>Administratrice</span>
+    </div>
+  </div>
+
+  <div class="user-status">
+    <span class="dot-online"></span>
+    <span>En ligne</span>
+    <button class="btn-icon">⚙️</button>
+  </div>
+</div>
+```
+
+---
+
+### 3. Action : Aligner les deux blocs (CSS)
+On commence par la structure globale. On veut que les infos soient à gauche et le statut à droite.
+
+```css
+.user-bar {
+  display: flex;
+  justify-content: space-between; /* Écarte les deux groupes */
+  align-items: center;            /* Centre tout verticalement */
+  
+  background-color: var(--surface);
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  margin: 20px 0;
+}
+```
+
+---
+
+### 4. Action : Aligner l'intérieur des blocs
+Maintenant, on s'occupe de l'alignement interne de chaque groupe.
+
+```css
+/* Alignement du groupe de gauche (Photo + Nom) */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* On force le titre à passer à la ligne */
+.user-details span {
+  display: block; 
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Alignement du groupe de droite (Point vert + Texte + Bouton) */
+.user-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot-online {
+  width: 8px;
+  height: 8px;
+  background-color: var(--success);
+  border-radius: 50%;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 5px;
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Regardez le groupe de gauche (`.user-info`). Si vous enlevez `display: flex`, l'image et le texte vont s'empiler bizarrement. En l'ajoutant, ils se rangent sagement côte à côte. Flexbox est l'outil indispensable pour créer des composants 'en ligne' propres."
+
+**Vérification :**
+1. L'avatar est-il bien à gauche du nom de Sarah ?
+2. Le statut "En ligne" est-il bien à droite de la barre ?
+3. Le petit point vert est-il bien centré verticalement par rapport au texte ?
+
 ---
 
 # 📐 MODULE 3 — Grid
