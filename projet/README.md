@@ -425,7 +425,107 @@ Créer un header de navigation qui reste collé en haut de la page quand on scro
 
 > **Concepts à utiliser** : `position: sticky`, `top: 0`, `display: flex`, `justify-content: space-between`, `backdrop-filter`
 
+
+
 ---
+
+# 🛠️ Exercice 1.4 — Le Header "Sticky" (Collant)
+
+L'objectif est de créer une barre de navigation qui reste accessible en haut de l'écran, même quand on fait défiler la page vers le bas. Nous allons aussi lui donner un look moderne appelé **"Glassmorphism"** (effet de verre dépoli).
+
+### 1. Comprendre les outils
+* **`position: sticky`** : C'est un mélange entre `relative` et `fixed`. L'élément défile normalement jusqu'à ce qu'il touche le bord de l'écran (défini par `top: 0`), puis il y reste "collé".
+* **Flexbox (`space-between`)** : On va demander au navigateur de distribuer l'espace automatiquement pour pousser le logo à gauche, les liens au milieu et le bouton à droite.
+* **`backdrop-filter: blur()`** : C'est une propriété moderne qui permet de flouter ce qui se trouve *derrière* l'élément. Cela crée l'effet "vitre" très utilisé par Apple ou Microsoft.
+
+
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc tout en haut, juste après l'ouverture de votre balise `<body>` dans `index.html`.
+
+```html
+<header class="main-header">
+  <span class="logo">🚀 DevPulse</span>
+  
+  <nav class="nav-links">
+    <a href="#dashboard">Dashboard</a>
+    <a href="#users">Utilisateurs</a>
+    <a href="#settings">Settings</a>
+  </nav>
+  
+  <button class="btn-login">Connexion</button>
+</header>
+```
+
+---
+
+### 3. Action : Rendre le Header "Collant" (CSS)
+Ouvrez `style.css` et ajoutez les styles de positionnement :
+
+```css
+.main-header {
+  /* ÉLÉMENT CLÉ : Se colle au sommet quand on scroll */
+  position: sticky;
+  top: 0;
+  z-index: 100; /* Doit être au-dessus du contenu mais sous le bouton flottant */
+
+  /* Alignement des 3 groupes d'éléments */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /* Espacement et taille */
+  padding: 15px 5%;
+  height: 70px;
+}
+```
+
+> **À ce stade :** Le header est en haut, mais on ne voit pas encore l'effet de transparence.
+
+---
+
+### 4. Action : L'effet "Glassmorphism"
+Ajoutons le style visuel pour créer cet effet de transparence floutée.
+
+```css
+.main-header {
+  /* ... code précédent ... */
+  
+  /* Fond semi-transparent (couleur de surface avec opacité 0.8) */
+  background-color: rgba(26, 29, 39, 0.8);
+  
+  /* LE FLOU : On floute ce qui passe derrière le header */
+  backdrop-filter: blur(10px);
+  
+  /* Bordure fine en bas pour délimiter */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Style rapide pour les liens */
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--accent);
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Pour tester le mode **Sticky**, scrollez votre page vers le bas (assurez-vous d'avoir assez de contenu en dessous, comme vos exercices précédents). Vous remarquerez que le header reste fixé en haut et que, grâce au `blur`, le contenu qui passe derrière devient flou. C'est l'effet 'verre' !"
+
+**Vérification :**
+1. Le logo est-il bien à gauche et le bouton à droite ? 
+2. Le texte derrière le header devient-il flou quand vous scrollez ?
+
 
 ## Exercice 1.5 — Z-index (empilement)
 

@@ -137,3 +137,47 @@ body {
   background-color: #7d6cf0; /* Une version légèrement plus claire de l'accent */
   transform: scale(1.05);    /* Grossit très légèrement au survol */
 }
+
+
+.main-header {
+  /* ÉLÉMENT CLÉ : Se colle au sommet quand on scroll */
+  position: sticky;
+  top: 0;
+  z-index: 100; /* Doit être au-dessus du contenu mais sous le bouton flottant */
+
+  /* Alignement des 3 groupes d'éléments */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /* Espacement et taille */
+  padding: 15px 5%;
+  height: 70px;
+}
+
+
+.main-header {
+  /* ... code précédent ... */
+  
+  /* Fond semi-transparent (couleur de surface avec opacité 0.8) */
+  background-color: rgba(26, 29, 39, 0.8);
+  
+  /* LE FLOU : On floute ce qui passe derrière le header */
+  backdrop-filter: blur(10px);
+  
+  /* Bordure fine en bas pour délimiter */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Style rapide pour les liens */
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--accent);
+}
