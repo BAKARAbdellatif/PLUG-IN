@@ -1176,6 +1176,118 @@ Créer un layout type dashboard : sidebar fixe à gauche (250px), contenu princi
 
 ---
 
+# 🛠️ Exercice 3.1 — Layout Dashboard (CSS Grid)
+
+L'objectif est de diviser votre écran en deux grandes zones : une barre latérale (Sidebar) à gauche qui garde une taille fixe, et une zone de contenu (Main) à droite qui occupe tout l'espace restant.
+
+### 1. Comprendre les outils
+* **`display: grid`** : Active le mode grille. Contrairement à Flexbox, vous dessinez d'abord les colonnes et les lignes, puis vous y placez le contenu.
+* **`grid-template-columns: 250px 1fr`** : C'est ici que l'on définit nos colonnes. La première fait **250px** (fixe). La deuxième fait **1fr** (fraction), ce qui signifie qu'elle prend "1 part de tout l'espace qui reste".
+* **`@media (max-width: 768px)`** : C'est une "Media Query". Elle permet de dire au navigateur : "Si l'écran est plus petit que 768px (tablettes/mobiles), change le style CSS".
+
+
+
+---
+
+### 2. Action : Structure HTML
+Ajoutez ce bloc dans votre fichier `index.html`. C'est l'organisation classique d'une application SaaS.
+
+```html
+<div class="dashboard">
+  <aside class="sidebar">
+    <h3>DevPulse Menu</h3>
+    <ul class="sidebar-menu">
+      <li><a href="#">📊 Dashboard</a></li>
+      <li><a href="#">👤 Utilisateurs</a></li>
+      <li><a href="#">📦 Produits</a></li>
+      <li><a href="#">📈 Analytics</a></li>
+      <li><a href="#">⚙️ Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <h1>Bienvenue sur DevPulse</h1>
+    <p>Votre dashboard de monitoring est prêt.</p>
+    </main>
+</div>
+```
+
+---
+
+### 3. Action : Créer la Grille (CSS)
+Ouvrez `style.css`. Nous allons définir la structure pour les grands écrans (ordinateurs).
+
+```css
+.dashboard {
+  display: grid;
+  /* La sidebar fait 250px, le contenu prend le reste (1fr) */
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background-color: var(--surface);
+  padding: 30px 20px;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.main-content {
+  padding: 40px;
+  background-color: var(--bg);
+}
+
+/* Style du menu sidebar */
+.sidebar-menu {
+  list-style: none;
+  margin-top: 30px;
+}
+
+.sidebar-menu li a {
+  display: block;
+  padding: 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: all 0.3s;
+}
+
+.sidebar-menu li a:hover {
+  background-color: rgba(255,255,255,0.05);
+  color: var(--accent);
+}
+```
+
+---
+
+### 4. Action : Rendre le Layout Responsive
+Le problème d'une colonne fixe de 250px, c'est que sur mobile, elle prend toute la place. Ajoutons une règle pour les petits écrans.
+
+```css
+@media (max-width: 768px) {
+  .dashboard {
+    /* Sur mobile, on empile les colonnes l'une sur l'autre */
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    min-height: auto; /* La sidebar ne fait plus toute la hauteur */
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+}
+```
+
+---
+
+### 👁️ Observation pour l'étudiant
+> "Jouez avec la largeur de votre navigateur. Quand vous passez en dessous d'une certaine taille, vous voyez la sidebar passer au-dessus du contenu ? C'est le principe du **Responsive Design**. En une seule ligne de CSS (`grid-template-columns: 1fr`), on a totalement changé l'apparence du site pour les mobiles."
+
+**Vérification :**
+1. Sur ordinateur, avez-vous bien le menu à gauche et le texte à droite ?
+2. Le menu sur la gauche prend-il bien toute la hauteur de la page (`100vh`) ?
+3. Les liens changent-ils de couleur au survol ?
+
+
 ## Exercice 3.2 — Grille de stat cards
 
 ### Objectif
